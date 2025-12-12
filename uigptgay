@@ -46,7 +46,7 @@ local function createToggleButton(mainFrame)
     imageButton.Position = UDim2.new(0, 20, 0.1, -6)
     imageButton.Size = UDim2.new(0, 50, 0, 50)
     imageButton.ZIndex = 10
-    imageButton.Image = "rbxassetid://71278098280108"
+    imageButton.Image = "rbxassetid://130160749337944"
     
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 12)
