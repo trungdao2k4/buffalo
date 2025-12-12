@@ -1,0 +1,601 @@
+
+local Library = {}
+
+-- Services
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+
+-- Tạo ScreenGui
+local function createScreenGui()
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "ModernUI"
+    gui.ResetOnSpawn = false
+    gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+    if gethui then
+        gui.Parent = gethui()
+    elseif syn and syn.protect_gui then
+        syn.protect_gui(gui)
+        gui.Parent = CoreGui
+    else
+        gui.Parent = CoreGui
+    end
+    
+    return gui
+end
+
+-- Tạo Toggle Button (Nút mở/đóng menu)
+local function createToggleButton(mainFrame)
+    local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+    
+    local toggleGui = Instance.new("ScreenGui")
+    toggleGui.Name = "ToggleButton"
+    toggleGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    toggleGui.ResetOnSpawn = false
+    toggleGui.Parent = playerGui
+    
+    local imageButton = Instance.new("ImageButton")
+    imageButton.Parent = toggleGui
+    imageButton.Active = true
+    imageButton.Draggable = true
+    imageButton.AutoButtonColor = false
+    imageButton.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+    imageButton.BorderSizePixel = 0
+    imageButton.Position = UDim2.new(0, 20, 0.1, -6)
+    imageButton.Size = UDim2.new(0, 50, 0, 50)
+    imageButton.ZIndex = 10
+    imageButton.Image = "rbxassetid://71278098280108"
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 12)
+    corner.Parent = imageButton
+    
+    local stroke = Instance.new("UIStroke")
+    stroke.Color = Color3.fromRGB(70, 130, 255)
+    stroke.Thickness = 2
+    stroke.Parent = imageButton
+    
+    -- Hover effect
+    imageButton.MouseEnter:Connect(function()
+        TweenService:Create(imageButton, TweenInfo.new(0.2), {
+            Size = UDim2.new(0, 55, 0, 55),
+            BackgroundColor3 = Color3.fromRGB(30, 30, 38)
+        }):Play()
+        TweenService:Create(stroke, TweenInfo.new(0.2), {
+            Thickness = 3,
+            Color = Color3.fromRGB(90, 150, 255)
+        }):Play()
+    end)
+    
+    imageButton.MouseLeave:Connect(function()
+        TweenService:Create(imageButton, TweenInfo.new(0.2), {
+            Size = UDim2.new(0, 50, 0, 50),
+            BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+        }):Play()
+        TweenService:Create(stroke, TweenInfo.new(0.2), {
+            Thickness = 2,
+            Color = Color3.fromRGB(70, 130, 255)
+        }):Play()
+    end)
+    
+    return imageButton
+end
+
+-- Tạo Window
+function Library:CreateWindow(title)
+    local screenGui = createScreenGui()
+    
+    -- Main Frame (Draggable)
+    local mainFrame = Instance.new("Frame")
+    mainFrame.Name = "MainFrame"
+    mainFrame.Size = UDim2.new(0, 550, 0, 400)
+    mainFrame.Position = UDim2.new(0.5, -275, 0.5, -200)
+    mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+    mainFrame.BorderSizePixel = 0
+    mainFrame.Active = true
+    mainFrame.Draggable = true
+    mainFrame.Visible = true
+    mainFrame.Parent = screenGui
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 12)
+    corner.Parent = mainFrame
+    
+    -- Shadow Effect
+    local shadow = Instance.new("ImageLabel")
+    shadow.Name = "Shadow"
+    shadow.Size = UDim2.new(1, 30, 1, 30)
+    shadow.Position = UDim2.new(0, -15, 0, -15)
+    shadow.BackgroundTransparency = 1
+    shadow.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+    shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+    shadow.ImageTransparency = 0.5
+    shadow.ScaleType = Enum.ScaleType.Slice
+    shadow.SliceCenter = Rect.new(10, 10, 118, 118)
+    shadow.ZIndex = 0
+    shadow.Parent = mainFrame
+    
+    -- Header
+    local header = Instance.new("Frame")
+    header.Name = "Header"
+    header.Size = UDim2.new(1, 0, 0, 50)
+    header.BackgroundColor3 = Color3.fromRGB(30, 30, 38)
+    header.BorderSizePixel = 0
+    header.Parent = mainFrame
+    
+    local headerCorner = Instance.new("UICorner")
+    headerCorner.CornerRadius = UDim.new(0, 12)
+    headerCorner.Parent = header
+    
+    local headerBottom = Instance.new("Frame")
+    headerBottom.Size = UDim2.new(1, 0, 0, 12)
+    headerBottom.Position = UDim2.new(0, 0, 1, -12)
+    headerBottom.BackgroundColor3 = Color3.fromRGB(30, 30, 38)
+    headerBottom.BorderSizePixel = 0
+    headerBottom.Parent = header
+    
+    -- Title
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Name = "Title"
+    titleLabel.Size = UDim2.new(1, -130, 1, 0)
+    titleLabel.Position = UDim2.new(0, 15, 0, 0)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Text = title
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.TextSize = 18
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Parent = header
+    
+    -- Minimize Button
+    local minimizeBtn = Instance.new("TextButton")
+    minimizeBtn.Name = "MinimizeButton"
+    minimizeBtn.Size = UDim2.new(0, 35, 0, 35)
+    minimizeBtn.Position = UDim2.new(1, -85, 0.5, -17.5)
+    minimizeBtn.BackgroundColor3 = Color3.fromRGB(255, 200, 60)
+    minimizeBtn.Text = "−"
+    minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    minimizeBtn.TextSize = 24
+    minimizeBtn.Font = Enum.Font.GothamBold
+    minimizeBtn.BorderSizePixel = 0
+    minimizeBtn.Parent = header
+    
+    local minimizeBtnCorner = Instance.new("UICorner")
+    minimizeBtnCorner.CornerRadius = UDim.new(0, 8)
+    minimizeBtnCorner.Parent = minimizeBtn
+    
+    -- Close Button
+    local closeBtn = Instance.new("TextButton")
+    closeBtn.Name = "CloseButton"
+    closeBtn.Size = UDim2.new(0, 35, 0, 35)
+    closeBtn.Position = UDim2.new(1, -45, 0.5, -17.5)
+    closeBtn.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
+    closeBtn.Text = "×"
+    closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeBtn.TextSize = 24
+    closeBtn.Font = Enum.Font.GothamBold
+    closeBtn.BorderSizePixel = 0
+    closeBtn.Parent = header
+    
+    local closeBtnCorner = Instance.new("UICorner")
+    closeBtnCorner.CornerRadius = UDim.new(0, 8)
+    closeBtnCorner.Parent = closeBtn
+    
+    closeBtn.MouseButton1Click:Connect(function()
+        screenGui:Destroy()
+    end)
+    
+    -- Container cho elements
+    local container = Instance.new("ScrollingFrame")
+    container.Name = "Container"
+    container.Size = UDim2.new(1, -20, 1, -70)
+    container.Position = UDim2.new(0, 10, 0, 60)
+    container.BackgroundTransparency = 1
+    container.BorderSizePixel = 0
+    container.ScrollBarThickness = 4
+    container.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 120)
+    container.CanvasSize = UDim2.new(0, 0, 0, 0)
+    container.Parent = mainFrame
+    
+    local listLayout = Instance.new("UIListLayout")
+    listLayout.Padding = UDim.new(0, 8)
+    listLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    listLayout.Parent = container
+    
+    listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+        container.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y + 10)
+    end)
+    
+    -- Tạo Toggle Button
+    local toggleButton = createToggleButton(mainFrame)
+    
+    -- Minimize/Maximize Logic
+    local isMinimized = false
+    local isHidden = false
+    local originalSize = mainFrame.Size
+    
+    minimizeBtn.MouseButton1Click:Connect(function()
+        isMinimized = not isMinimized
+        
+        local tweenInfo = TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+        
+        if isMinimized then
+            minimizeBtn.Text = "□"
+            mainFrame.Draggable = false
+            
+            local targetSize = UDim2.new(0, 550, 0, 50)
+            
+            TweenService:Create(mainFrame, tweenInfo, {Size = targetSize}):Play()
+            TweenService:Create(container, tweenInfo, {Size = UDim2.new(1, -20, 0, 0)}):Play()
+            TweenService:Create(minimizeBtn, tweenInfo, {BackgroundColor3 = Color3.fromRGB(100, 200, 100)}):Play()
+            TweenService:Create(shadow, tweenInfo, {ImageTransparency = 1}):Play()
+        else
+            minimizeBtn.Text = "−"
+            mainFrame.Draggable = true
+            
+            TweenService:Create(mainFrame, tweenInfo, {Size = originalSize}):Play()
+            TweenService:Create(container, tweenInfo, {Size = UDim2.new(1, -20, 1, -70)}):Play()
+            TweenService:Create(minimizeBtn, tweenInfo, {BackgroundColor3 = Color3.fromRGB(255, 200, 60)}):Play()
+            TweenService:Create(shadow, tweenInfo, {ImageTransparency = 0.5}):Play()
+        end
+    end)
+    
+    -- Toggle Button Click (Ẩn/Hiện UI)
+    toggleButton.MouseButton1Click:Connect(function()
+        isHidden = not isHidden
+        
+        local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Back, isHidden and Enum.EasingDirection.In or Enum.EasingDirection.Out)
+        
+        if isHidden then
+            -- Ẩn UI
+            TweenService:Create(mainFrame, tweenInfo, {
+                Size = UDim2.new(0, 0, 0, 0),
+                Position = UDim2.new(0.5, 0, 0.5, 0)
+            }):Play()
+            
+            wait(0.3)
+            mainFrame.Visible = false
+        else
+            -- Hiện UI
+            mainFrame.Visible = true
+            
+            local targetSize = isMinimized and UDim2.new(0, 550, 0, 50) or originalSize
+            local targetPos = UDim2.new(0.5, -275, 0.5, -200)
+            
+            TweenService:Create(mainFrame, tweenInfo, {
+                Size = targetSize,
+                Position = targetPos
+            }):Play()
+        end
+    end)
+    
+    -- Hover effects
+    minimizeBtn.MouseEnter:Connect(function()
+        if not isMinimized then
+            TweenService:Create(minimizeBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 210, 80)}):Play()
+        else
+            TweenService:Create(minimizeBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(110, 210, 110)}):Play()
+        end
+    end)
+    
+    minimizeBtn.MouseLeave:Connect(function()
+        if not isMinimized then
+            TweenService:Create(minimizeBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 200, 60)}):Play()
+        else
+            TweenService:Create(minimizeBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 200, 100)}):Play()
+        end
+    end)
+    
+    closeBtn.MouseEnter:Connect(function()
+        TweenService:Create(closeBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 80, 80)}):Play()
+    end)
+    
+    closeBtn.MouseLeave:Connect(function()
+        TweenService:Create(closeBtn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 60, 60)}):Play()
+    end)
+    
+    local Window = {}
+    
+    -- Toggle/Minimize function
+    function Window:Toggle()
+        toggleButton.MouseButton1Click:Fire()
+    end
+    
+    function Window:Minimize()
+        toggleButton.MouseButton1Click:Fire()
+    end
+    
+    -- Tạo Button
+    function Window:CreateButton(text, callback)
+        local button = Instance.new("TextButton")
+        button.Name = "Button"
+        button.Size = UDim2.new(1, -10, 0, 40)
+        button.BackgroundColor3 = Color3.fromRGB(70, 130, 255)
+        button.Text = text
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.TextSize = 15
+        button.Font = Enum.Font.GothamSemibold
+        button.BorderSizePixel = 0
+        button.Parent = container
+        
+        local btnCorner = Instance.new("UICorner")
+        btnCorner.CornerRadius = UDim.new(0, 8)
+        btnCorner.Parent = button
+        
+        button.MouseButton1Click:Connect(function()
+            local tweenInfo = TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+            local tween = TweenService:Create(button, tweenInfo, {BackgroundColor3 = Color3.fromRGB(60, 120, 245)})
+            tween:Play()
+            tween.Completed:Wait()
+            
+            if callback then
+                callback()
+            end
+            
+            local tweenBack = TweenService:Create(button, tweenInfo, {BackgroundColor3 = Color3.fromRGB(70, 130, 255)})
+            tweenBack:Play()
+        end)
+        
+        button.MouseEnter:Connect(function()
+            TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(80, 140, 255)}):Play()
+        end)
+        
+        button.MouseLeave:Connect(function()
+            TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(70, 130, 255)}):Play()
+        end)
+        
+        return button
+    end
+    
+    -- Tạo Toggle
+    function Window:CreateToggle(text, default, callback)
+        local toggleFrame = Instance.new("Frame")
+        toggleFrame.Name = "ToggleFrame"
+        toggleFrame.Size = UDim2.new(1, -10, 0, 40)
+        toggleFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+        toggleFrame.BorderSizePixel = 0
+        toggleFrame.Parent = container
+        
+        local toggleCorner = Instance.new("UICorner")
+        toggleCorner.CornerRadius = UDim.new(0, 8)
+        toggleCorner.Parent = toggleFrame
+        
+        local label = Instance.new("TextLabel")
+        label.Size = UDim2.new(1, -60, 1, 0)
+        label.Position = UDim2.new(0, 15, 0, 0)
+        label.BackgroundTransparency = 1
+        label.Text = text
+        label.TextColor3 = Color3.fromRGB(220, 220, 220)
+        label.TextSize = 15
+        label.Font = Enum.Font.Gotham
+        label.TextXAlignment = Enum.TextXAlignment.Left
+        label.Parent = toggleFrame
+        
+        local toggleButton = Instance.new("TextButton")
+        toggleButton.Size = UDim2.new(0, 45, 0, 24)
+        toggleButton.Position = UDim2.new(1, -55, 0.5, -12)
+        toggleButton.BackgroundColor3 = default and Color3.fromRGB(70, 200, 100) or Color3.fromRGB(60, 60, 70)
+        toggleButton.Text = ""
+        toggleButton.BorderSizePixel = 0
+        toggleButton.Parent = toggleFrame
+        
+        local toggleBtnCorner = Instance.new("UICorner")
+        toggleBtnCorner.CornerRadius = UDim.new(1, 0)
+        toggleBtnCorner.Parent = toggleButton
+        
+        local toggleCircle = Instance.new("Frame")
+        toggleCircle.Size = UDim2.new(0, 18, 0, 18)
+        toggleCircle.Position = default and UDim2.new(1, -21, 0.5, -9) or UDim2.new(0, 3, 0.5, -9)
+        toggleCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        toggleCircle.BorderSizePixel = 0
+        toggleCircle.Parent = toggleButton
+        
+        local circleCorner = Instance.new("UICorner")
+        circleCorner.CornerRadius = UDim.new(1, 0)
+        circleCorner.Parent = toggleCircle
+        
+        local toggled = default
+        
+        toggleButton.MouseButton1Click:Connect(function()
+            toggled = not toggled
+            
+            local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+            
+            if toggled then
+                TweenService:Create(toggleButton, tweenInfo, {BackgroundColor3 = Color3.fromRGB(70, 200, 100)}):Play()
+                TweenService:Create(toggleCircle, tweenInfo, {Position = UDim2.new(1, -21, 0.5, -9)}):Play()
+            else
+                TweenService:Create(toggleButton, tweenInfo, {BackgroundColor3 = Color3.fromRGB(60, 60, 70)}):Play()
+                TweenService:Create(toggleCircle, tweenInfo, {Position = UDim2.new(0, 3, 0.5, -9)}):Play()
+            end
+            
+            if callback then
+                callback(toggled)
+            end
+        end)
+        
+        return {
+            SetValue = function(self, value)
+                toggled = value
+                if toggled then
+                    toggleButton.BackgroundColor3 = Color3.fromRGB(70, 200, 100)
+                    toggleCircle.Position = UDim2.new(1, -21, 0.5, -9)
+                else
+                    toggleButton.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
+                    toggleCircle.Position = UDim2.new(0, 3, 0.5, -9)
+                end
+            end
+        }
+    end
+    
+    -- Tạo Label
+    function Window:CreateLabel(text)
+        local label = Instance.new("TextLabel")
+        label.Name = "Label"
+        label.Size = UDim2.new(1, -10, 0, 30)
+        label.BackgroundTransparency = 1
+        label.Text = text
+        label.TextColor3 = Color3.fromRGB(180, 180, 180)
+        label.TextSize = 14
+        label.Font = Enum.Font.Gotham
+        label.TextXAlignment = Enum.TextXAlignment.Left
+        label.Parent = container
+        
+        return {
+            SetText = function(self, newText)
+                label.Text = newText
+            end
+        }
+    end
+    
+    -- Tạo Discord Invite
+    function Window:AddDiscordInvite(config)
+        local name = config.Name or "Discord Server"
+        local description = config.Description or "Join our community!"
+        local logo = config.Logo or ""
+        local invite = config.Invite or ""
+        
+        local discordFrame = Instance.new("Frame")
+        discordFrame.Name = "DiscordInvite"
+        discordFrame.Size = UDim2.new(1, -10, 0, 90)
+        discordFrame.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+        discordFrame.BorderSizePixel = 0
+        discordFrame.Parent = container
+        
+        local discordCorner = Instance.new("UICorner")
+        discordCorner.CornerRadius = UDim.new(0, 10)
+        discordCorner.Parent = discordFrame
+        
+        -- Discord Logo
+        local logoImage = Instance.new("ImageLabel")
+        logoImage.Size = UDim2.new(0, 60, 0, 60)
+        logoImage.Position = UDim2.new(0, 15, 0.5, -30)
+        logoImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+        logoImage.BorderSizePixel = 0
+        logoImage.Image = logo
+        logoImage.Parent = discordFrame
+        
+        local logoCorner = Instance.new("UICorner")
+        logoCorner.CornerRadius = UDim.new(1, 0)
+        logoCorner.Parent = logoImage
+        
+        -- Text Container
+        local textContainer = Instance.new("Frame")
+        textContainer.Size = UDim2.new(1, -165, 1, 0)
+        textContainer.Position = UDim2.new(0, 85, 0, 0)
+        textContainer.BackgroundTransparency = 1
+        textContainer.Parent = discordFrame
+        
+        -- Title
+        local titleLabel = Instance.new("TextLabel")
+        titleLabel.Size = UDim2.new(1, 0, 0, 25)
+        titleLabel.Position = UDim2.new(0, 0, 0, 15)
+        titleLabel.BackgroundTransparency = 1
+        titleLabel.Text = name
+        titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        titleLabel.TextSize = 16
+        titleLabel.Font = Enum.Font.GothamBold
+        titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+        titleLabel.TextTruncate = Enum.TextTruncate.AtEnd
+        titleLabel.Parent = textContainer
+        
+        -- Description
+        local descLabel = Instance.new("TextLabel")
+        descLabel.Size = UDim2.new(1, 0, 0, 20)
+        descLabel.Position = UDim2.new(0, 0, 0, 40)
+        descLabel.BackgroundTransparency = 1
+        descLabel.Text = description
+        descLabel.TextColor3 = Color3.fromRGB(220, 220, 230)
+        descLabel.TextSize = 13
+        descLabel.Font = Enum.Font.Gotham
+        descLabel.TextXAlignment = Enum.TextXAlignment.Left
+        descLabel.TextTruncate = Enum.TextTruncate.AtEnd
+        descLabel.Parent = textContainer
+        
+        -- Join Button
+        local joinButton = Instance.new("TextButton")
+        joinButton.Size = UDim2.new(0, 65, 0, 60)
+        joinButton.Position = UDim2.new(1, -75, 0.5, -30)
+        joinButton.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
+        joinButton.Text = "JOIN"
+        joinButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        joinButton.TextSize = 14
+        joinButton.Font = Enum.Font.GothamBold
+        joinButton.BorderSizePixel = 0
+        joinButton.Parent = discordFrame
+        
+        local joinCorner = Instance.new("UICorner")
+        joinCorner.CornerRadius = UDim.new(0, 8)
+        joinCorner.Parent = joinButton
+        
+        -- Click to copy invite
+        joinButton.MouseButton1Click:Connect(function()
+            -- Animation
+            local tweenInfo = TweenInfo.new(0.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+            TweenService:Create(joinButton, tweenInfo, {Size = UDim2.new(0, 60, 0, 55)}):Play()
+            wait(0.15)
+            TweenService:Create(joinButton, tweenInfo, {Size = UDim2.new(0, 65, 0, 60)}):Play()
+            
+            -- Copy to clipboard
+            if setclipboard then
+                setclipboard(invite)
+                
+                -- Change text temporarily
+                local originalText = joinButton.Text
+                joinButton.Text = "✓"
+                joinButton.BackgroundColor3 = Color3.fromRGB(87, 201, 149)
+                
+                wait(1.5)
+                
+                joinButton.Text = originalText
+                joinButton.BackgroundColor3 = Color3.fromRGB(67, 181, 129)
+                
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Discord Invite";
+                    Text = "Link đã được copy! Paste vào browser để join.";
+                    Duration = 4;
+                })
+            else
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Discord";
+                    Text = invite;
+                    Duration = 10;
+                })
+            end
+        end)
+        
+        -- Hover effects
+        joinButton.MouseEnter:Connect(function()
+            TweenService:Create(joinButton, TweenInfo.new(0.2), {
+                BackgroundColor3 = Color3.fromRGB(77, 191, 139)
+            }):Play()
+        end)
+        
+        joinButton.MouseLeave:Connect(function()
+            TweenService:Create(joinButton, TweenInfo.new(0.2), {
+                BackgroundColor3 = Color3.fromRGB(67, 181, 129)
+            }):Play()
+        end)
+        
+        discordFrame.MouseEnter:Connect(function()
+            TweenService:Create(discordFrame, TweenInfo.new(0.2), {
+                BackgroundColor3 = Color3.fromRGB(98, 111, 252)
+            }):Play()
+        end)
+        
+        discordFrame.MouseLeave:Connect(function()
+            TweenService:Create(discordFrame, TweenInfo.new(0.2), {
+                BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+            }):Play()
+        end)
+        
+        return discordFrame
+    end
+    
+    return Window
+end
+
+return Library
+
