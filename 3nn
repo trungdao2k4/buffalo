@@ -3542,26 +3542,31 @@ end
 	return Main_Function
 end
 -- ==========================================
--- LỚP TƯƠNG THÍCH REDZLIB (ĐÃ FIX LỖI LOAD FULL)
+-- LỚP TƯƠNG THÍCH REDZLIB (TỰ ĐỘNG DỊCH CÚ PHÁP SANG 3NN)
 -- ==========================================
 function Library:MakeWindow(Config)
+	-- Khởi tạo Window của 3nn
 	local realWindow = self:CreateWindow({
 		Title = Config.Title or "UI",
 		Desc = Config.SubTitle or "",
 		Image = Config.Icon or "rbxassetid://130160749337944"
 	})
 	
+	-- Bypass Minimizer vì 3nn đã có sẵn nút thu nhỏ (logo)
 	function realWindow:NewMinimizer()
 		return { CreateMobileMinimizer = function() end }
 	end
 	
+	-- Xử lý tạo Tab
 	function realWindow:MakeTab(TabConfig)
 		local TabTitle = type(TabConfig) == "table" and TabConfig.Title or TabConfig
 		local realTab = realWindow:AddTab(TabTitle)
 		
+		-- Biến lưu trữ Section hiện tại đang vẽ (mặc định tạo 1 cái tên General)
 		local currentSection = realTab:AddLeftGroupbox("General")
 		local TabWrapper = {}
 		
+		-- 1. Chuyển đổi AddDiscordInvite
 		function TabWrapper:AddDiscordInvite(cfg)
 			local sec = realTab:AddLeftGroupbox(cfg.Title or "Discord")
 			sec:AddLabel(cfg.Description or "Join our community")
@@ -3569,33 +3574,66 @@ function Library:MakeWindow(Config)
 				Title = "Copy Link Discord",
 				Callback = function()
 					setclipboard(cfg.Invite or "")
-					Library:Notify({Title = "Thành Công", Desc = "Đã chép link Discord!", Duration = 3})
+					Library:Notify({
+						Title = "Thành Công", 
+						Desc = "Đã chép link Discord!", 
+						Duration = 3
+					})
 				end
 			})
 		end
 		
+		-- 2. Chuyển đổi AddSection
 		function TabWrapper:AddSection(Name)
 			currentSection = realTab:AddLeftGroupbox(Name)
 			return currentSection
 		end
 		
+		-- 3. Chuyển đổi AddParagraph (Hỗ trợ SetDesc, SetTitle)
 		function TabWrapper:AddParagraph(Title, Content)
 			if not currentSection then currentSection = realTab:AddLeftGroupbox("Info") end
-			currentSection:AddLabel(Title .. "\n" .. Content)
+			
+			local tTitle = type(Title) == "table" and (Title.Title or Title.Name) or Title or ""
+			local tContent = type(Title) == "table" and (Title.Content or Title.Description) or Content or ""
+			
+			local labelObj = currentSection:AddLabel(tTitle .. "\n" .. tContent)
+			
+			local ParaWrapper = {
+				CurrentTitle = tTitle,
+				CurrentContent = tContent
+			}
+			
+			function ParaWrapper:SetTitle(newTitle)
+				self.CurrentTitle = newTitle
+				labelObj:SetText(self.CurrentTitle .. "\n" .. self.CurrentContent)
+			end
+			
+			function ParaWrapper:SetDesc(newDesc)
+				self.CurrentContent = newDesc
+				labelObj:SetText(self.CurrentTitle .. "\n" .. self.CurrentContent)
+			end
+			
+			function ParaWrapper:Set(newTitle, newDesc)
+				if newTitle then self.CurrentTitle = newTitle end
+				if newDesc then self.CurrentContent = newDesc end
+				labelObj:SetText(self.CurrentTitle .. "\n" .. self.CurrentContent)
+			end
+			
+			return ParaWrapper
 		end
 		
-		-- ==========================================
-		-- PHẦN DỊCH CHÍNH XÁC TỪNG THÀNH PHẦN
-		-- ==========================================
+		-- 4. Chuyển đổi AddToggle (Hỗ trợ Description)
 		function TabWrapper:AddToggle(cfg)
 			local name = cfg.Name or cfg.Title or "Toggle"
 			return currentSection:AddToggle(name, {
 				Title = name,
+				Desc = cfg.Description or cfg.Desc,
 				Default = cfg.Default or false,
 				Callback = cfg.Callback or function() end
 			})
 		end
 		
+		-- 5. Chuyển đổi AddButton
 		function TabWrapper:AddButton(cfg)
 			return currentSection:AddButton({
 				Title = cfg.Name or cfg.Title or "Button",
@@ -3603,6 +3641,7 @@ function Library:MakeWindow(Config)
 			})
 		end
 		
+		-- 6. Chuyển đổi AddSlider
 		function TabWrapper:AddSlider(cfg)
 			return currentSection:AddSlider({
 				Title = cfg.Name or cfg.Title or "Slider",
@@ -3613,6 +3652,7 @@ function Library:MakeWindow(Config)
 			})
 		end
 		
+		-- 7. Chuyển đổi AddDropdown
 		function TabWrapper:AddDropdown(cfg)
 			local name = cfg.Name or cfg.Title or "Dropdown"
 			return currentSection:AddDropdown(name, {
@@ -3624,6 +3664,7 @@ function Library:MakeWindow(Config)
 			})
 		end
 
+		-- 8. Chuyển đổi AddTextBox
 		function TabWrapper:AddTextBox(cfg)
 			local name = cfg.Name or cfg.Title or "TextBox"
 			return currentSection:AddInput(name, {
@@ -3632,11 +3673,20 @@ function Library:MakeWindow(Config)
 				Callback = cfg.Callback or function() end
 			})
 		end
+		
+		-- 9. Xử lý AddKeyBind (Giữ cho code không bị lỗi khi Redzlib gọi hàm này)
+		function TabWrapper:AddKeyBind(cfg)
+			local name = cfg.Name or cfg.Title or "KeyBind"
+			return currentSection:AddButton({
+				Title = name .. " (Keybind chưa hỗ trợ)",
+				Callback = function() end
+			})
+		end
 
 		return TabWrapper
 	end
 	
 	return realWindow
 end
--- ==========================================
+
 return Library
