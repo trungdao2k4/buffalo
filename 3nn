@@ -12,43 +12,42 @@ getgenv().Config = true
 
 local DisableAnimation = game.Players.LocalPlayer.PlayerGui:FindFirstChild('TouchGui')
 local T1UIColor = {
-	["Border Color"] = Color3.fromRGB(255, 206, 27),
+	["Border Color"] = Color3.fromRGB(0, 170, 255),
 	["Click Effect Color"] = Color3.fromRGB(230, 230, 230),
 	["Setting Icon Color"] = Color3.fromRGB(230, 230, 230),
 	["Logo Image"] = "rbxassetid://5009915795",
 	["Search Icon Color"] = Color3.fromRGB(240, 240, 230),
-	["Search Icon Highlight Color"] = Color3.fromRGB(255, 206, 27),
+	["Search Icon Highlight Color"] = Color3.fromRGB(0, 170, 255),
 	["GUI Text Color"] = Color3.fromRGB(235, 235, 230),
 	["Text Color"] = Color3.fromRGB(235, 235, 230),
 	["Placeholder Text Color"] = Color3.fromRGB(170, 170, 160),
-	["Title Text Color"] = Color3.fromRGB(255, 206, 27),
+	["Title Text Color"] = Color3.fromRGB(0, 170, 255),
 	["Background Main Color"] = Color3.fromRGB(18, 18, 22),
 	["Background 1 Color"] = Color3.fromRGB(28, 28, 34),
 	["Background 1 Transparency"] = 0.1,
 	["Background 2 Color"] = Color3.fromRGB(38, 38, 46),
 	["Background 3 Color"] = Color3.fromRGB(48, 48, 56),
 	["Background Image"] = "",
-	["Page Selected Color"] = Color3.fromRGB(255, 206, 27),
+	["Page Selected Color"] = Color3.fromRGB(0, 170, 255),
 	["Section Text Color"] = Color3.fromRGB(220, 220, 210),
-	["Section Underline Color"] = Color3.fromRGB(255, 206, 27),
-	["Toggle Border Color"] = Color3.fromRGB(255, 206, 27),
+	["Section Underline Color"] = Color3.fromRGB(0, 170, 255),
+	["Toggle Border Color"] = Color3.fromRGB(0, 170, 255),
 	["Toggle Checked Color"] = Color3.fromRGB(230, 230, 230),
 	["Toggle Desc Color"] = Color3.fromRGB(185, 185, 185),
-	["Button Color"] = Color3.fromRGB(255, 206, 27),
+	["Button Color"] = Color3.fromRGB(0, 170, 255),
 	["Label Color"] = Color3.fromRGB(38, 38, 42),
 	["Dropdown Icon Color"] = Color3.fromRGB(230, 230, 230),
-	["Dropdown Selected Color"] = Color3.fromRGB(255, 206, 27),
-	["Dropdown Selected Check Color"] = Color3.fromRGB(219, 177, 23),
-	["Textbox Highlight Color"] = Color3.fromRGB(255, 206, 27),
-	["Box Highlight Color"] = Color3.fromRGB(255, 206, 27),
-	["Slider Line Color"] = Color3.fromRGB(255, 206, 27),
-	["Slider Highlight Color"] = Color3.fromRGB(194, 156, 20),
+	["Dropdown Selected Color"] = Color3.fromRGB(0, 170, 255),
+	["Dropdown Selected Check Color"] = Color3.fromRGB(0, 135, 204), 
+	["Textbox Highlight Color"] = Color3.fromRGB(0, 170, 255),
+	["Box Highlight Color"] = Color3.fromRGB(0, 170, 255),
+	["Slider Line Color"] = Color3.fromRGB(0, 170, 255),
+	["Slider Highlight Color"] = Color3.fromRGB(0, 135, 204), 
 	["Tween Animation 1 Speed"] = DisableAnimation and 0 or 0.25,
 	["Tween Animation 2 Speed"] = DisableAnimation and 0 or 0.5,
 	["Tween Animation 3 Speed"] = DisableAnimation and 0 or 0.1,
 	["Text Stroke Transparency"] = 0.5
 }
-
 getgenv().UIColor = T1UIColor
 getgenv().AllControls = {}
 getgenv().UIToggled = false
@@ -1495,11 +1494,11 @@ function Library:CreateWindow(Setting)
              UICorner_3.CornerRadius = UDim.new(0,12)
              
              UIGradient_1.Parent = ClickArea_1
-             UIGradient_1.Color = ColorSequence.new{
-                 ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 216, 77)), 
-                 ColorSequenceKeypoint.new(0.4, Color3.fromRGB(255, 206, 27)), 
-                 ColorSequenceKeypoint.new(0.6, Color3.fromRGB(235, 186, 17)), 
-                 ColorSequenceKeypoint.new(1, Color3.fromRGB(215, 166, 7))
+            UIGradient_1.Color = ColorSequence.new{
+                 ColorSequenceKeypoint.new(0, Color3.fromRGB(77, 196, 255)), 
+                 ColorSequenceKeypoint.new(0.4, Color3.fromRGB(0, 170, 255)), 
+                 ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 140, 220)), 
+                 ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 110, 190))
              }
              UIGradient_1.Rotation = 90
              
