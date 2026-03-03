@@ -1323,7 +1323,7 @@ function Library:CreateWindow(Setting)
 				check.Name = "check"
 				check.Parent = checkbox
 				check.AnchorPoint = Vector2.new(0.5, 0.5)
-				check.BackgroundColor3 = Color3.fromRGB(255, 206, 27)
+				check.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
 				check.Position = UDim2.new(0.5, 0, 0.5, 0)
 				local cac = 5
 				if Desc then
@@ -1485,7 +1485,7 @@ function Library:CreateWindow(Setting)
              ClickArea_1.Name = "ClickArea"
              ClickArea_1.Parent = RowBG_1
              ClickArea_1.AnchorPoint = Vector2.new(1, 0.5)
-             ClickArea_1.BackgroundColor3 = Color3.fromRGB(255, 206, 27)
+             ClickArea_1.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
              ClickArea_1.Position = UDim2.new(1, -8,0.5, 0)
              ClickArea_1.Size = UDim2.new(0, 94,0, 30)
              ClickArea_1.ClipsDescendants = true
