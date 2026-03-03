@@ -8,6 +8,7 @@ if getgenv().Nousigi then
 	end
 end
 getgenv().Nousigi = true
+getgenv().Config = true -- FIX LỖI NOTIFY Ở ĐÂY
 
 local DisableAnimation = game.Players.LocalPlayer.PlayerGui:FindFirstChild('TouchGui')
 local T1UIColor = {
@@ -54,7 +55,7 @@ getgenv().UIToggled = false
 
 
 local currcolor = {}
-local Library = {};
+local Library = {}
 local Library_Function = {}
 local TweenService = game:GetService('TweenService')
 local uis = game:GetService("UserInputService")
@@ -177,15 +178,14 @@ Library.DestroyUI = function()
 end
 
 if true then
-	local button = btnHide -- Assuming this is a TextButton or ImageButton
+	local button = btnHide 
 	local UIS = game:GetService("UserInputService")
 	
 	local dragging = false
 	local dragInput, dragStart, startPos
-	local holdTime = 0.1 -- Time to hold before dragging is enabled
+	local holdTime = 0.1 
 	local holdStarted = 0
 	
-	-- Function to update the button's position
 	local function update(input)
 		local delta = input.Position - dragStart
 		button.Position = UDim2.new(
@@ -194,44 +194,38 @@ if true then
 		)
 	end
 	
-	-- Function to detect the start of dragging (for both mouse and touch)
 	local function onInputBegan(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-			holdStarted = tick() -- Record the time when holding starts
+			holdStarted = tick() 
 			dragStart = input.Position
 			startPos = button.Position
 	
-			-- Listen for release to stop dragging
 			input.Changed:Connect(function()
 				if input.UserInputState == Enum.UserInputState.End then
 					dragging = false
-					holdStarted = 0 -- Reset the hold timer
+					holdStarted = 0 
 				end
 			end)
 		end
 	end
 	
-	-- Function to detect when dragging stops
 	local function onInputEnded(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 			dragging = false
-			holdStarted = 0 -- Reset the hold timer
+			holdStarted = 0 
 		end
 	end
 	
-	-- Detect input movement (for both mouse and touch)
 	local function onInputChanged(input)
 		if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 			dragInput = input
 		end
 	end
 	
-	-- Connect the events
 	button.InputBegan:Connect(onInputBegan)
 	button.InputEnded:Connect(onInputEnded)
 	button.InputChanged:Connect(onInputChanged)
 	
-	-- RenderStepped updates the position while dragging
 	RunService.RenderStepped:Connect(function()
 		if holdStarted > 0 and (tick() - holdStarted >= holdTime) and not dragging then
 			dragging = true
@@ -279,9 +273,9 @@ function Library_Function.Getcolor(color)
 end
 
 local libCreateNoti = function(Setting)
-	getgenv().TitleNameNoti = Setting.Title or ""; 
-	local Description = Setting.Description or Setting.Desc or Setting.Content or ""; 
-	local Duration = Setting.Duration or Setting.Timeshow or Setting.Delay or 10;
+	getgenv().TitleNameNoti = Setting.Title or ""
+	local Description = Setting.Description or Setting.Desc or Setting.Content or ""
+	local Duration = Setting.Duration or Setting.Timeshow or Setting.Delay or 10
 
 	local NotiFrame = Instance.new("Frame")
 	local Noticontainer = Instance.new("Frame")
@@ -336,7 +330,7 @@ local libCreateNoti = function(Setting)
 	local colorG = tostring(Library_Function.Getcolor(getgenv().UIColor['Title Text Color'])[2])
 	local colorB = tostring(Library_Function.Getcolor(getgenv().UIColor['Title Text Color'])[3])
 	local color = colorR .. ',' .. colorG .. ',' .. colorB
-    TextLabelNoti.Text = "<font color=\"rgb(" .. tostring(color or "255,206,27") .. ")\">" .. tostring("Trẩu Hub") .. "</font> " .. tostring(getgenv().TitleNameNoti or "")
+    TextLabelNoti.Text = "<font color=\"rgb(" .. tostring(color or "255,206,27") .. ")\">" .. tostring("Banana Cat Hub") .. "</font> " .. tostring(getgenv().TitleNameNoti or "")
     
 	TextLabelNoti.Name = "TextLabelNoti"
 	TextLabelNoti.Parent = Topnoti
@@ -432,7 +426,7 @@ local libCreateNoti = function(Setting)
 end
 
 function Library:Notify(Setting, bypass)
-	if not getgenv().Config or bypass then
+	if getgenv().Config or bypass then
 		local s, e = pcall(function()
 			libCreateNoti(Setting)
 		end)
@@ -443,7 +437,7 @@ function Library:Notify(Setting, bypass)
 end
 
 function Library:CreateWindow(Setting)
-    local TitleNameMain = Setting.Title or "Trẩu Hub"
+    local TitleNameMain = Setting.Title or "Banana Cat Hub"
     getgenv().MainDesc = Setting.Desc or Setting.Subtitle or ""
     
     if Setting.Image then
@@ -503,11 +497,11 @@ function Library:CreateWindow(Setting)
 	MainContainer.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
 	MainContainer.Size = UDim2.new(1, 0, 1, 0)
 
-	local uistr = Instance.new("UIStroke", MainContainer);
-	uistr.Thickness = 1;
-	uistr.Color = Color3.fromRGB(90, 90, 70);
+	local uistr = Instance.new("UIStroke", MainContainer)
+	uistr.Thickness = 1
+	uistr.Color = Color3.fromRGB(90, 90, 70)
 
-	local uigradient = Instance.new("UIGradient", MainContainer);
+	local uigradient = Instance.new("UIGradient", MainContainer)
 	uigradient.Color = ColorSequence.new{
 		ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
 		ColorSequenceKeypoint.new(1, Color3.fromRGB(200, 200, 200))
@@ -578,7 +572,7 @@ function Library:CreateWindow(Setting)
 	local colorG = tostring(Library_Function.Getcolor(getgenv().UIColor['Title Text Color'])[2])
 	local colorB = tostring(Library_Function.Getcolor(getgenv().UIColor['Title Text Color'])[3])
 	local color = colorR .. ',' .. colorG .. ',' .. colorB
-    TextLabelMain.Text = "<font color=\"rgb(" .. tostring(color or "255,206,27") .. ")\">" .. tostring(TitleNameMain or "Trẩu Hub") .. "</font> " .. tostring(getgenv().MainDesc or "")
+    TextLabelMain.Text = "<font color=\"rgb(" .. tostring(color or "255,206,27") .. ")\">" .. tostring(TitleNameMain or "Banana Cat Hub") .. "</font> " .. tostring(getgenv().MainDesc or "")
 
 	PageControl.Name = "Background1"
 	PageControl.Parent = Concacmain
@@ -718,22 +712,18 @@ function Library:CreateWindow(Setting)
 	Shadow.ScaleType = Enum.ScaleType.Slice
 	Shadow.SliceCenter = Rect.new(24, 24, 276, 276)
 
-    -- Thêm biến để lưu thông tin section
     local sectionInfo = {}
     
-    -- Tạo hàm GlobalSearch nếu chưa tồn tại
     if not GlobalSearch then
         GlobalSearch = function(searchText)
             searchText = string.lower(searchText)
             
             if searchText == "" then
-                -- Hiển thị tất cả như cũ
                 for _, control in pairs(getgenv().AllControls) do
                     control.TabButton.Visible = true
                     control.Section.Visible = true
                     control.Element.Visible = true
                 end
-                -- Hiển thị tất cả tab
                 for _, tab in pairs(ControlList:GetChildren()) do
                     if not tab:IsA('UIListLayout') then
                         tab.Visible = true
@@ -741,35 +731,28 @@ function Library:CreateWindow(Setting)
                 end
                 return
             end
-            
-            -- Ẩn tất cả trước
+        
             for _, control in pairs(getgenv().AllControls) do
                 control.Section.Visible = false
                 control.Element.Visible = false
             end
             
-            -- Ẩn tất cả tab
             for _, tab in pairs(ControlList:GetChildren()) do
                 if not tab:IsA('UIListLayout') then
                     tab.Visible = false
                 end
             end
             
-            -- Tạo bản đồ section
             local sectionsWithElements = {}
             local elementsInSection = {}
             
-            -- Phân tích từng control
             for _, control in pairs(getgenv().AllControls) do
                 local elementName = string.lower(control.Name or "")
                 local sectionName = string.lower(control.SectionName or "")
                 
-                -- Kiểm tra phần tử (sử dụng string.find thay vì string.match)
                 local elementFound = string.find(elementName, searchText, 1, true) ~= nil
-                -- Kiểm tra section
                 local sectionFound = string.find(sectionName, searchText, 1, true) ~= nil
                 
-                -- Tạo bản đồ section
                 if not elementsInSection[control.Section] then
                     elementsInSection[control.Section] = {}
                 end
@@ -779,20 +762,17 @@ function Library:CreateWindow(Setting)
                     sectionFound = sectionFound
                 })
                 
-                -- Đánh dấu section có phần tử khớp
                 if elementFound then
                     sectionsWithElements[control.Section] = true
                 end
             end
             
-            -- Xử lý hiển thị
             local foundTabs = {}
             
             for section, elements in pairs(elementsInSection) do
                 local shouldShowSection = false
                 local hasElementMatch = false
                 
-                -- Kiểm tra section có khớp không
                 for _, elementInfo in ipairs(elements) do
                     if elementInfo.sectionFound then
                         shouldShowSection = true
@@ -802,15 +782,12 @@ function Library:CreateWindow(Setting)
                     end
                 end
                 
-                -- Logic hiển thị
                 for _, elementInfo in ipairs(elements) do
                     local control = elementInfo.control
                     
                     if elementInfo.elementFound then
-                        -- Phần tử khớp: hiển thị phần tử
                         control.Element.Visible = true
                         
-                        -- Nếu section cũng khớp hoặc có phần tử khớp: hiện section
                         if elementInfo.sectionFound or hasElementMatch then
                             control.Section.Visible = true
                         end
@@ -818,17 +795,15 @@ function Library:CreateWindow(Setting)
                         foundTabs[control.TabName] = true
                         control.TabButton.Visible = true
                     elseif elementInfo.sectionFound and not hasElementMatch then
-                        -- Section khớp nhưng không có phần tử khớp: chỉ hiện section
                         control.Section.Visible = true
                         control.Element.Visible = false
-                        
+                    
                         foundTabs[control.TabName] = true
                         control.TabButton.Visible = true
                     end
                 end
             end
             
-            -- Hiển thị các tab có kết quả
             for tabName, _ in pairs(foundTabs) do
                 for _, tab in pairs(ControlList:GetChildren()) do
                     if not tab:IsA('UIListLayout') and string.find(tab.Name, tabName, 1, true) then
@@ -837,14 +812,11 @@ function Library:CreateWindow(Setting)
                 end
             end
             
-            -- Nếu không tìm thấy gì cả, hiển thị thông báo
             if not next(foundTabs) then
-                -- Có thể thêm thông báo "Không tìm thấy kết quả" ở đây nếu muốn
             end
         end
     end
     
-    -- Kết nối sự kiện search (giữ nguyên)
     SearchBox:GetPropertyChangedSignal("Text"):Connect(function()
         GlobalSearch(SearchBox.Text)
     end)
@@ -863,7 +835,6 @@ function Library:CreateWindow(Setting)
 		LayoutOrder = LayoutOrder + 1
 		LayoutOrderBut = LayoutOrderBut + 1
 
-		--Control 
 		local PageName = Instance.new("Frame")
 		local Frame = Instance.new("Frame")
 		local TabNameCorner = Instance.new("UICorner")
@@ -940,8 +911,6 @@ function Library:CreateWindow(Setting)
 		PageButton.Text = ""
 		PageButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 		PageButton.TextSize = 14.000
-
-		-- Container
 
 		local PageContainer = Instance.new("Frame")
 		local UICorner = Instance.new("UICorner")
@@ -1109,26 +1078,28 @@ function Library:CreateWindow(Setting)
 			end
 		end
 
-PageButton.MouseButton1Click:Connect(function()
-            if tostring(UIPage.CurrentPage) == PageContainer.Name then 
-                return
-            end
-            UIPage:JumpTo(PageContainer)
+		PageButton.MouseButton1Click:Connect(function()
+			if tostring(UIPage.CurrentPage) == PageContainer.Name then 
+				return
+			end
 
-            for i, v in next, ControlList:GetChildren() do
-                if not (v:IsA('UIListLayout')) then
-                    if v.Name == Page_Name .. "_Control" then 
-                        TweenService:Create(v.Frame.Line.PageInLine, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
-                            BackgroundTransparency = 0
-                        }):Play()
-                    else
-                        TweenService:Create(v.Frame.Line.PageInLine, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
-                            BackgroundTransparency = 1
-                        }):Play()
-                    end
-                end
-            end
-        end)
+			UIPage:JumpTo(PageContainer)
+
+			for i, v in next, ControlList:GetChildren() do
+				if not (v:IsA('UIListLayout')) then
+					if v.Name == Page_Name .. "_Control" then 
+						TweenService:Create(v.Frame.Line.PageInLine, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
+							BackgroundTransparency = 0
+						}):Play()
+					else
+						TweenService:Create(v.Frame.Line.PageInLine, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
+							BackgroundTransparency = 1
+						}):Play()
+					end
+				end
+			end
+		end)
+
 		local pageFunction = {}
 
 		function pageFunction:AddSection(Section_Name, Toggleable, SectionGap, SectionColor)
@@ -1518,7 +1489,7 @@ PageButton.MouseButton1Click:Connect(function()
              ClickArea_1.BackgroundColor3 = Color3.fromRGB(255, 206, 27)
              ClickArea_1.Position = UDim2.new(1, -8,0.5, 0)
              ClickArea_1.Size = UDim2.new(0, 94,0, 30)
-             ClickArea_1.ClipsDescendants = true  -- THÊM DÒNG NÀY: Ngăn ripple tràn ra
+             ClickArea_1.ClipsDescendants = true
              
              UICorner_3.Parent = ClickArea_1
              UICorner_3.CornerRadius = UDim.new(0,12)
@@ -1569,10 +1540,8 @@ PageButton.MouseButton1Click:Connect(function()
              Button_1.TextColor3 = Color3.fromRGB(240, 240, 240)
              Button_1.TextSize = 13
 
-             -- UIScale mặc định
              UIScale_1.Scale = 1
              
-             -- HOVER (chỉ phóng to)
              local scaleHover = TweenService:Create(UIScale_1, TweenInfo.new(0.12, Enum.EasingStyle.Sine), { Scale = 1.05 })
              local scaleNormal = TweenService:Create(UIScale_1, TweenInfo.new(0.12, Enum.EasingStyle.Sine), { Scale = 1 })
              
@@ -1585,12 +1554,10 @@ PageButton.MouseButton1Click:Connect(function()
              end)
              
                 Button_1.MouseButton1Down:Connect(function()
-                    
-                    -- Lấy kích thước thực tế của ClickArea
+                   
                     local w = ClickArea_1.AbsoluteSize.X
                     local h = ClickArea_1.AbsoluteSize.Y
                     
-                    -- Tạo ripple với hình dạng bo góc giống button (chữ nhật bo góc)
                     local ripple = Instance.new("Frame")
                     ripple.AnchorPoint = Vector2.new(0.5, 0.5)
                     ripple.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1600,12 +1567,10 @@ PageButton.MouseButton1Click:Connect(function()
                     ripple.ZIndex = 20
                     ripple.Parent = ClickArea_1
                     
-                    -- Tạo UICorner cho ripple với bo góc y hệt button
                     local rippleCorner = Instance.new("UICorner")
-                    rippleCorner.CornerRadius = UICorner_3.CornerRadius -- Lấy góc bo từ button
+                    rippleCorner.CornerRadius = UICorner_3.CornerRadius 
                     rippleCorner.Parent = ripple
                     
-                    -- Animation ripple mở rộng từ tâm ra đầy đủ button
                     local rippleTween = TweenService:Create(
                         ripple,
                         TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
@@ -1822,7 +1787,6 @@ PageButton.MouseButton1Click:Connect(function()
                 ScrollContainerList.SortOrder = Enum.SortOrder.LayoutOrder
                 ScrollContainerList.Padding = UDim.new(0, 5)
                 
-                -- Tạo internal section để chứa các control
                 local InternalSection = Instance.new("Frame")
                 InternalSection.Name = "InternalSection"
                 InternalSection.Parent = ScrollContainer
@@ -1876,10 +1840,8 @@ PageButton.MouseButton1Click:Connect(function()
                     end
                 end)
                 
-                -- Tạo dropdown section functions (CHỈ CÓ SLIDER)
                 local dropdownSectionFunction = {}
                 
-                -- HÀM TẠO SLIDER (RỘNG HƠN, SÁT VIỀN)
                 function dropdownSectionFunction:AddSlider(Setting)
                     local TitleText = tostring(Setting.Text or Setting.Title) or ""
                     local minValue = tonumber(Setting.Min) or 0
@@ -1907,7 +1869,7 @@ PageButton.MouseButton1Click:Connect(function()
                     SliderFrame.Parent = InternalSection
                     SliderFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
                     SliderFrame.BackgroundTransparency = 1.000
-                    SliderFrame.Size = UDim2.new(1, 0, 0, 50)  -- Chiếm toàn bộ chiều rộng
+                    SliderFrame.Size = UDim2.new(1, 0, 0, 50)  
                     
                     SliderCorner.CornerRadius = UDim.new(0, 4)
                     SliderCorner.Name = "SliderCorner"
@@ -1917,7 +1879,7 @@ PageButton.MouseButton1Click:Connect(function()
                     SliderBG.Parent = SliderFrame
                     SliderBG.AnchorPoint = Vector2.new(0.5, 0.5)
                     SliderBG.Position = UDim2.new(0.5, 0, 0.5, 0)
-                    SliderBG.Size = UDim2.new(1, -5, 1, 0)  -- Chiếm gần toàn bộ (trừ 5 pixel)
+                    SliderBG.Size = UDim2.new(1, -5, 1, 0)  
                     SliderBG.BackgroundColor3 = Color3.fromRGB(28, 28, 34)
                     SliderBG.BackgroundTransparency = 0.25
                     
@@ -1930,7 +1892,7 @@ PageButton.MouseButton1Click:Connect(function()
                     SliderTitle.BackgroundColor3 = Color3.fromRGB(230, 230, 230)
                     SliderTitle.BackgroundTransparency = 1.000
                     SliderTitle.Position = UDim2.new(0, 10, 0, 0)
-                    SliderTitle.Size = UDim2.new(0.65, -10, 0, 25)  -- Title chiếm 65%
+                    SliderTitle.Size = UDim2.new(0.65, -10, 0, 25)  
                     SliderTitle.Font = Enum.Font.GothamBlack
                     SliderTitle.Text = TitleText
                     SliderTitle.TextSize = 14.000
@@ -1942,7 +1904,7 @@ PageButton.MouseButton1Click:Connect(function()
                     SliderBar.Parent = SliderFrame
                     SliderBar.AnchorPoint = Vector2.new(0.5, 0.5)
                     SliderBar.Position = UDim2.new(0.5, 0, 0.5, 14)
-                    SliderBar.Size = UDim2.new(0.9, 0, 0, 6)  -- Thanh slider rộng 90%
+                    SliderBar.Size = UDim2.new(0.9, 0, 0, 6)  
                     SliderBar.BackgroundColor3 = getgenv().UIColor["Background 2 Color"]
                     
                     SliderButton.Name = "SliderButton"
@@ -1973,7 +1935,7 @@ PageButton.MouseButton1Click:Connect(function()
                     Sliderboxframe.Parent = SliderFrame
                     Sliderboxframe.AnchorPoint = Vector2.new(1, 0)
                     Sliderboxframe.Position = UDim2.new(1, -10, 0, 5)
-                    Sliderboxframe.Size = UDim2.new(0.25, 0, 0, 25)  -- Textbox chiếm 25%
+                    Sliderboxframe.Size = UDim2.new(0.25, 0, 0, 25)  
                     Sliderboxframe.BackgroundColor3 = getgenv().UIColor["Background 2 Color"]
                     
                     Sliderbox.CornerRadius = UDim.new(0, 4)
@@ -2170,7 +2132,7 @@ PageButton.MouseButton1Click:Connect(function()
 				local ScrollContainer = Instance.new("Frame")
 				local ScrollContainerList = Instance.new("UIListLayout")
 				local dropdownLeave = false
-				local Dropdowntitle;
+				local Dropdowntitle
 				if Search then
 					Dropdowntitle = Instance.new("TextBox")
 				else
@@ -2219,16 +2181,16 @@ PageButton.MouseButton1Click:Connect(function()
 				if not Selected then
 					if Search then
 						Dropdowntitle.PlaceholderColor3 = getgenv().UIColor["Placeholder Text Color"]
-						Dropdowntitle.PlaceholderText = Title .. ': ' .. tostring(Default or "");
+						Dropdowntitle.PlaceholderText = Title .. ': ' .. tostring(Default or "")
 					else
-						Dropdowntitle.Text = Title .. ': ' .. tostring(Default or "");
+						Dropdowntitle.Text = Title .. ': ' .. tostring(Default or "")
 					end
 				else
 					if Search then
 						Dropdowntitle.PlaceholderColor3 = getgenv().UIColor["Placeholder Text Color"]
-						Dropdowntitle.PlaceholderText = Title .. ': ' .. tostring(Default or "");
+						Dropdowntitle.PlaceholderText = Title .. ': ' .. tostring(Default or "")
 					else
-						Dropdowntitle.Text = Title .. ': ' .. tostring(Default or "");
+						Dropdowntitle.Text = Title .. ': ' .. tostring(Default or "")
 					end
 				end
 				Dropdowntitle.TextColor3 = getgenv().UIColor["Text Color"]
@@ -2321,13 +2283,12 @@ PageButton.MouseButton1Click:Connect(function()
 					end
 				end
 				local ListNew
-                local OrderedList = {} -- Thêm biến lưu thứ tự
+                local OrderedList = {}
                 if Selected then
                     ListNew = {}
                     for _, value in ipairs(List) do
-                        -- Kiểm tra nếu value trùng với Default thì set true
                         ListNew[value] = (value == Default)
-                        table.insert(OrderedList, value) -- Lưu thứ tự
+                        table.insert(OrderedList, value)
                     end
                 else
                     ListNew = List
@@ -2485,7 +2446,7 @@ PageButton.MouseButton1Click:Connect(function()
 							local maxValue = tonumber(v.Max) or 100
 							local Precise = v.Precise or false
 							local DefaultValue = tonumber(v.Default) or minValue
-							local SizeChia = 365;
+							local SizeChia = 365
 							local SliderFrame = Instance.new("Frame")
 							local SliderCorner = Instance.new("UICorner")
 							local SliderBG = Instance.new("Frame")
@@ -2603,42 +2564,36 @@ PageButton.MouseButton1Click:Connect(function()
 								local holdTime = 0
 								local holdStarted = 0
 
-										-- Function to detect the start of dragging (for both mouse and touch)
 								local function onInputBegan(input)
 									if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-										holdStarted = tick() -- Record the time when holding starts
+										holdStarted = tick() 
 										
-												-- Listen for release to stop dragging
 										input.Changed:Connect(function()
 											if input.UserInputState == Enum.UserInputState.End then
 												dragging = false
-												holdStarted = 0 -- Reset the hold timer
+												holdStarted = 0 
 											end
 										end)
 									end
 								end
 										
-										-- Function to detect when dragging stops
 								local function onInputEnded(input)
 									if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 										dragging = false
-										holdStarted = 0 -- Reset the hold timer
+										holdStarted = 0 
 									end
 								end
 
-										-- Detect input movement (for both mouse and touch)
 								local function onInputChanged(input)
 									if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 										dragInput = input
 									end
 								end
 										
-										-- Connect the events
 								SliderButton.InputBegan:Connect(onInputBegan)
 								SliderButton.InputEnded:Connect(onInputEnded)
 								SliderButton.InputChanged:Connect(onInputChanged)
 										
-										-- RenderStepped updates the position while dragging
 								RunService.RenderStepped:Connect(function()
 									if holdStarted > 0 and (tick() - holdStarted >= holdTime) and not dragging then
 										dragging = true
@@ -2654,45 +2609,39 @@ PageButton.MouseButton1Click:Connect(function()
 							else
 								local dragging = false
 								local dragInput
-								local holdTime = 0 -- Time to hold before dragging is enabled
+								local holdTime = 0 
 								local holdStarted = 0
 
-										-- Function to detect the start of dragging (for both mouse and touch)
 								local function onInputBegan(input)
 									if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-										holdStarted = tick() -- Record the time when holding starts
+										holdStarted = tick() 
 										
-												-- Listen for release to stop dragging
 										input.Changed:Connect(function()
 											if input.UserInputState == Enum.UserInputState.End then
 												dragging = false
-												holdStarted = 0 -- Reset the hold timer
+												holdStarted = 0 
 											end
 										end)
 									end
 								end
 										
-										-- Function to detect when dragging stops
 								local function onInputEnded(input)
 									if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 										dragging = false
-										holdStarted = 0 -- Reset the hold timer
+										holdStarted = 0 
 									end
 								end
 
-										-- Detect input movement (for both mouse and touch)
 								local function onInputChanged(input)
 									if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 										dragInput = input
 									end
 								end
 										
-										-- Connect the events
 								SliderButton.InputBegan:Connect(onInputBegan)
 								SliderButton.InputEnded:Connect(onInputEnded)
 								SliderButton.InputChanged:Connect(onInputChanged)
 										
-										-- RenderStepped updates the position while dragging
 								RunService.RenderStepped:Connect(function()
 									if holdStarted > 0 and (tick() - holdStarted >= holdTime) and not dragging then
 										dragging = true
@@ -2853,7 +2802,7 @@ PageButton.MouseButton1Click:Connect(function()
 									refreshlist()
 								end)
 								if Sel.Value == v then
-									SampleItemBG.BackgroundTransparency = .5;
+									SampleItemBG.BackgroundTransparency = .5
 									SampleItemBG.BackgroundColor3 = UIColor["Dropdown Selected Check Color"]
 									SampleItem.LayoutOrder = 0
 								end
@@ -2915,7 +2864,6 @@ PageButton.MouseButton1Click:Connect(function()
 				end
 				function dropdownFunction:GetNewList(List)
 					Sel.Value = ""
-							--refreshlist()
 					isbusy = false
 					local listsize = isbusy and UDim2.new(1, 0, 0, 170) or UDim2.new(1, 0, 0, 0)
 					local mainsize = isbusy and UDim2.new(1, 0, 0, 200) or UDim2.new(1, 0, 0, 25)
@@ -2938,10 +2886,8 @@ PageButton.MouseButton1Click:Connect(function()
 						Dropdowntitle.Text = Title .. ': '
 					end
 				end
-				-- THÊM ĐOẠN NÀY
                 function dropdownFunction:SetValue(value)
                     if not Selected then
-                        -- Dropdown đơn lẻ (single)
                         if table.find(ListNew, value) then
                             Sel.Value = value
                             if Search then
@@ -2955,7 +2901,6 @@ PageButton.MouseButton1Click:Connect(function()
                             refreshlist()
                         end
                     else
-                        -- Dropdown multi-select
                         if ListNew[value] ~= nil then
                             ListNew[value] = true
                             if Search then
@@ -2991,8 +2936,8 @@ PageButton.MouseButton1Click:Connect(function()
                     SectionName = Section_Name,
                     TabName = Page_Name,
                     TabButton = PageName,
-                    SetValue = dropdownFunction.SetValue,  -- THÊM DÒNG NÀY
-                    GetValue = dropdownFunction.GetValue   -- THÊM DÒNG NÀY
+                    SetValue = dropdownFunction.SetValue,
+                    GetValue = dropdownFunction.GetValue
                 }
                 table.insert(getgenv().AllControls, controlData)
                 
@@ -3002,7 +2947,7 @@ PageButton.MouseButton1Click:Connect(function()
 function sectionFunction:AddKeyBind(Setting, Callback)
     local TitleText = tostring(Setting.Title or Setting.Text) or ""
     local Default = Setting.Default or Setting.Key or "F"
-    local Mode = Setting.Mode or "Toggle" -- Hold hoặc Toggle
+    local Mode = Setting.Mode or "Toggle" 
     local Callback = Setting.Callback or Callback or function() end
     
     local function GetKeyString(key)
@@ -3018,7 +2963,6 @@ function sectionFunction:AddKeyBind(Setting, Callback)
     local ToggleState = false
     local HoldActive = false
     
-    -- UI Elements (BỎ ModeButton)
     local BindFrame = Instance.new("Frame")
     local BindCorner = Instance.new("UICorner")
     local BindBG = Instance.new("Frame")
@@ -3084,7 +3028,6 @@ function sectionFunction:AddKeyBind(Setting, Callback)
     Bindkey.TextSize = 14.000
     Bindkey.TextColor3 = getgenv().UIColor["Text Color"]
     
-    -- Change Key
     Bindkey.MouseButton1Click:Connect(function()
         if Picking then return end
         
@@ -3116,7 +3059,6 @@ function sectionFunction:AddKeyBind(Setting, Callback)
         end)
     end)
     
-    -- Input Began (Press)
     uis.InputBegan:Connect(function(input, gpe)
         if gpe or Picking then return end
         if uis:GetFocusedTextBox() then return end
@@ -3141,7 +3083,6 @@ function sectionFunction:AddKeyBind(Setting, Callback)
         end
     end)
     
-    -- Input Ended (Release) - Only for Hold mode
     uis.InputEnded:Connect(function(input)
         if Picking then return end
         if uis:GetFocusedTextBox() then return end
@@ -3322,7 +3263,7 @@ end
                 }
                 table.insert(getgenv().AllControls, controlData)
                 
-				return textbox_function;
+				return textbox_function
 			end
 			function sectionFunction:AddSlider(Setting)
 				local TitleText = tostring(Setting.Text or Setting.Title) or ""
@@ -3331,7 +3272,7 @@ end
 				local Precise = Setting.Precise or false
 				local DefaultValue = tonumber(Setting.Default) or 0
 				local Callback = Setting.Callback
-				local SizeChia = 400;
+				local SizeChia = 400
 				local SliderFrame = Instance.new("Frame")
 				local SliderCorner = Instance.new("UICorner")
 				local SliderBG = Instance.new("Frame")
@@ -3445,45 +3386,39 @@ end
 				end
 				local dragging = false
 				local dragInput
-				local holdTime = 0 -- Time to hold before dragging is enabled
+				local holdTime = 0 
 				local holdStarted = 0
 
-						-- Function to detect the start of dragging (for both mouse and touch)
 				local function onInputBegan(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-						holdStarted = tick() -- Record the time when holding starts
+						holdStarted = tick() 
 						
-								-- Listen for release to stop dragging
 						input.Changed:Connect(function()
 							if input.UserInputState == Enum.UserInputState.End then
 								dragging = false
-								holdStarted = 0 -- Reset the hold timer
+								holdStarted = 0 
 							end
 						end)
 					end
 				end
 						
-						-- Function to detect when dragging stops
 				local function onInputEnded(input)
 					if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 						dragging = false
-						holdStarted = 0 -- Reset the hold timer
+						holdStarted = 0 
 					end
 				end
 
-						-- Detect input movement (for both mouse and touch)
 				local function onInputChanged(input)
 					if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
 						dragInput = input
 					end
 				end
 						
-						-- Connect the events
 				SliderButton.InputBegan:Connect(onInputBegan)
 				SliderButton.InputEnded:Connect(onInputEnded)
 				SliderButton.InputChanged:Connect(onInputChanged)
 						
-						-- RenderStepped updates the position while dragging
 				RunService.RenderStepped:Connect(function()
 					if holdStarted > 0 and (tick() - holdStarted >= holdTime) and not dragging then
 						dragging = true
