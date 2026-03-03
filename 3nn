@@ -8,7 +8,7 @@ if getgenv().Nousigi then
 	end
 end
 getgenv().Nousigi = true
-getgenv().Config = true -- FIX LỖI NOTIFY Ở ĐÂY
+getgenv().Config = true
 
 local DisableAnimation = game.Players.LocalPlayer.PlayerGui:FindFirstChild('TouchGui')
 local T1UIColor = {
