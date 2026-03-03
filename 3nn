@@ -1109,35 +1109,26 @@ function Library:CreateWindow(Setting)
 			end
 		end
 
-		PageButton.MouseButton1Click:Connect(function()
-			if tostring(UIPage.CurrentPage) == PageContainer.Name then 
-				return
-			end
+PageButton.MouseButton1Click:Connect(function()
+            if tostring(UIPage.CurrentPage) == PageContainer.Name then 
+                return
+            end
+            UIPage:JumpTo(PageContainer)
 
-			for i, v in pairs(MainPage:GetChildren()) do
-				if not (v:IsA('UIPageLayout')) and not (v:IsA('UICorner')) then
-					v.Visible = false
-				end
-			end
-
-			PageContainer.Visible = true 
-			UIPage:JumpTo(PageContainer)
-
-			for i, v in next, ControlList:GetChildren() do
-				if not (v:IsA('UIListLayout')) then
-					if v.Name == Page_Name .. "_Control" then 
-						TweenService:Create(v.Frame.Line.PageInLine, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
-							BackgroundTransparency = 0
-						}):Play()
-					else
-						TweenService:Create(v.Frame.Line.PageInLine, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
-							BackgroundTransparency = 1
-						}):Play()
-					end
-				end
-			end
-		end)
-
+            for i, v in next, ControlList:GetChildren() do
+                if not (v:IsA('UIListLayout')) then
+                    if v.Name == Page_Name .. "_Control" then 
+                        TweenService:Create(v.Frame.Line.PageInLine, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
+                            BackgroundTransparency = 0
+                        }):Play()
+                    else
+                        TweenService:Create(v.Frame.Line.PageInLine, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
+                            BackgroundTransparency = 1
+                        }):Play()
+                    end
+                end
+            end
+        end)
 		local pageFunction = {}
 
 		function pageFunction:AddSection(Section_Name, Toggleable, SectionGap, SectionColor)
