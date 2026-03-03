@@ -3562,9 +3562,17 @@ function Library:MakeWindow(Config)
 		local TabTitle = type(TabConfig) == "table" and TabConfig.Title or TabConfig
 		local realTab = realWindow:AddTab(TabTitle)
 		
-		-- Biến lưu trữ Section hiện tại đang vẽ (mặc định tạo 1 cái tên General)
-		local currentSection = realTab:AddLeftGroupbox("General")
+		-- Đã fix: Đổi thành nil, không tạo sẵn section General nữa
+		local currentSection = nil 
 		local TabWrapper = {}
+		
+		-- Hàm nội bộ: Kiểm tra nếu chưa có Section thì mới tạo "General"
+		local function checkSection()
+			if not currentSection then 
+				currentSection = realTab:AddLeftGroupbox("General") 
+			end
+			return currentSection
+		end
 		
 		-- 1. Chuyển đổi AddDiscordInvite
 		function TabWrapper:AddDiscordInvite(cfg)
@@ -3591,12 +3599,12 @@ function Library:MakeWindow(Config)
 		
 		-- 3. Chuyển đổi AddParagraph (Hỗ trợ SetDesc, SetTitle)
 		function TabWrapper:AddParagraph(Title, Content)
-			if not currentSection then currentSection = realTab:AddLeftGroupbox("Info") end
+			local sec = checkSection()
 			
 			local tTitle = type(Title) == "table" and (Title.Title or Title.Name) or Title or ""
 			local tContent = type(Title) == "table" and (Title.Content or Title.Description) or Content or ""
 			
-			local labelObj = currentSection:AddLabel(tTitle .. "\n" .. tContent)
+			local labelObj = sec:AddLabel(tTitle .. "\n" .. tContent)
 			
 			local ParaWrapper = {
 				CurrentTitle = tTitle,
@@ -3622,10 +3630,10 @@ function Library:MakeWindow(Config)
 			return ParaWrapper
 		end
 		
-		-- 4. Chuyển đổi AddToggle (Hỗ trợ Description)
+		-- 4. Chuyển đổi AddToggle
 		function TabWrapper:AddToggle(cfg)
 			local name = cfg.Name or cfg.Title or "Toggle"
-			return currentSection:AddToggle(name, {
+			return checkSection():AddToggle(name, {
 				Title = name,
 				Desc = cfg.Description or cfg.Desc,
 				Default = cfg.Default or false,
@@ -3635,7 +3643,7 @@ function Library:MakeWindow(Config)
 		
 		-- 5. Chuyển đổi AddButton
 		function TabWrapper:AddButton(cfg)
-			return currentSection:AddButton({
+			return checkSection():AddButton({
 				Title = cfg.Name or cfg.Title or "Button",
 				Callback = cfg.Callback or function() end
 			})
@@ -3643,7 +3651,7 @@ function Library:MakeWindow(Config)
 		
 		-- 6. Chuyển đổi AddSlider
 		function TabWrapper:AddSlider(cfg)
-			return currentSection:AddSlider({
+			return checkSection():AddSlider({
 				Title = cfg.Name or cfg.Title or "Slider",
 				Min = cfg.Min or 0,
 				Max = cfg.Max or 100,
@@ -3655,7 +3663,7 @@ function Library:MakeWindow(Config)
 		-- 7. Chuyển đổi AddDropdown
 		function TabWrapper:AddDropdown(cfg)
 			local name = cfg.Name or cfg.Title or "Dropdown"
-			return currentSection:AddDropdown(name, {
+			return checkSection():AddDropdown(name, {
 				Title = name,
 				Values = cfg.Options or cfg.Values or {},
 				Default = cfg.Default,
@@ -3667,17 +3675,17 @@ function Library:MakeWindow(Config)
 		-- 8. Chuyển đổi AddTextBox
 		function TabWrapper:AddTextBox(cfg)
 			local name = cfg.Name or cfg.Title or "TextBox"
-			return currentSection:AddInput(name, {
+			return checkSection():AddInput(name, {
 				Title = name,
 				Placeholder = cfg.Placeholder or "",
 				Callback = cfg.Callback or function() end
 			})
 		end
 		
-		-- 9. Xử lý AddKeyBind (Giữ cho code không bị lỗi khi Redzlib gọi hàm này)
+		-- 9. Xử lý AddKeyBind
 		function TabWrapper:AddKeyBind(cfg)
 			local name = cfg.Name or cfg.Title or "KeyBind"
-			return currentSection:AddButton({
+			return checkSection():AddButton({
 				Title = name .. " (Keybind chưa hỗ trợ)",
 				Callback = function() end
 			})
@@ -3685,8 +3693,6 @@ function Library:MakeWindow(Config)
 
 		return TabWrapper
 	end
-	
 	return realWindow
 end
-
 return Library
