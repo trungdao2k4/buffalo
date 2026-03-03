@@ -3541,15 +3541,16 @@ end
 
 	return Main_Function
 end
+-- ==========================================
+-- LỚP TƯƠNG THÍCH REDZLIB (ĐÃ FIX LỖI LOAD FULL)
+-- ==========================================
 function Library:MakeWindow(Config)
-	-- Tạo Window bằng hàm của 3nn
 	local realWindow = self:CreateWindow({
 		Title = Config.Title or "UI",
 		Desc = Config.SubTitle or "",
 		Image = Config.Icon or "rbxassetid://130160749337944"
 	})
 	
-	-- Bỏ qua Minimizer vì 3nn đã có sẵn nút thu nhỏ logo
 	function realWindow:NewMinimizer()
 		return { CreateMobileMinimizer = function() end }
 	end
@@ -3558,12 +3559,9 @@ function Library:MakeWindow(Config)
 		local TabTitle = type(TabConfig) == "table" and TabConfig.Title or TabConfig
 		local realTab = realWindow:AddTab(TabTitle)
 		
-		-- Tạo một section vô hình làm nơi chứa mặc định
 		local currentSection = realTab:AddLeftGroupbox("General")
-		
 		local TabWrapper = {}
 		
-		-- Dịch hàm AddDiscordInvite
 		function TabWrapper:AddDiscordInvite(cfg)
 			local sec = realTab:AddLeftGroupbox(cfg.Title or "Discord")
 			sec:AddLabel(cfg.Description or "Join our community")
@@ -3576,32 +3574,69 @@ function Library:MakeWindow(Config)
 			})
 		end
 		
-		-- Dịch hàm AddSection
 		function TabWrapper:AddSection(Name)
 			currentSection = realTab:AddLeftGroupbox(Name)
 			return currentSection
 		end
 		
-		-- Dịch hàm AddParagraph
 		function TabWrapper:AddParagraph(Title, Content)
 			if not currentSection then currentSection = realTab:AddLeftGroupbox("Info") end
 			currentSection:AddLabel(Title .. "\n" .. Content)
 		end
 		
-		-- Tự động chuyển tiếp các hàm Toggle, Button, Slider... xuống Section hiện tại
-		setmetatable(TabWrapper, {
-			__index = function(t, key)
-				return function(_, ...)
-					if currentSection and currentSection[key] then
-						return currentSection[key](currentSection, ...)
-					end
-				end
-			end
-		})
+		-- ==========================================
+		-- PHẦN DỊCH CHÍNH XÁC TỪNG THÀNH PHẦN
+		-- ==========================================
+		function TabWrapper:AddToggle(cfg)
+			local name = cfg.Name or cfg.Title or "Toggle"
+			return currentSection:AddToggle(name, {
+				Title = name,
+				Default = cfg.Default or false,
+				Callback = cfg.Callback or function() end
+			})
+		end
 		
+		function TabWrapper:AddButton(cfg)
+			return currentSection:AddButton({
+				Title = cfg.Name or cfg.Title or "Button",
+				Callback = cfg.Callback or function() end
+			})
+		end
+		
+		function TabWrapper:AddSlider(cfg)
+			return currentSection:AddSlider({
+				Title = cfg.Name or cfg.Title or "Slider",
+				Min = cfg.Min or 0,
+				Max = cfg.Max or 100,
+				Default = cfg.Default or cfg.Min or 0,
+				Callback = cfg.Callback or function() end
+			})
+		end
+		
+		function TabWrapper:AddDropdown(cfg)
+			local name = cfg.Name or cfg.Title or "Dropdown"
+			return currentSection:AddDropdown(name, {
+				Title = name,
+				Values = cfg.Options or cfg.Values or {},
+				Default = cfg.Default,
+				Multi = cfg.MultiSelect or cfg.Multi or false,
+				Callback = cfg.Callback or function() end
+			})
+		end
+
+		function TabWrapper:AddTextBox(cfg)
+			local name = cfg.Name or cfg.Title or "TextBox"
+			return currentSection:AddInput(name, {
+				Title = name,
+				Placeholder = cfg.Placeholder or "",
+				Callback = cfg.Callback or function() end
+			})
+		end
+
 		return TabWrapper
 	end
 	
 	return realWindow
 end
+-- ==========================================
 return Library
