@@ -1425,204 +1425,202 @@ function Library:CreateWindow(Setting)
                 
 				return toggleFunction
 			end
-        function sectionFunction:AddButton(Setting, Callback)
-        	local Title = Setting.Title or Setting.Text or ""
-			local Desc = Setting.Desc or Setting.Description
-        	local Callback = Setting.Callback or Setting.Func or function() end
-            local Button = Instance.new("Frame")
-            local RowBG_1 = Instance.new("Frame")
-            local UICorner_1 = Instance.new("UICorner")
-            local RowHover_1 = Instance.new("Frame")
-            local UICorner_2 = Instance.new("UICorner")
-            local TextColor_1 = Instance.new("TextLabel")
-			local TextDesc_1 = nil
-            local ClickArea_1 = Instance.new("Frame")
-            local UICorner_3 = Instance.new("UICorner")
-            local UIGradient_1 = Instance.new("UIGradient")
-            local ImageLabel_1 = Instance.new("ImageLabel")
-            local Frame_1 = Instance.new("Frame")
-            local UICorner_4 = Instance.new("UICorner")
-            local UIScale_1 = Instance.new("UIScale")
-            local Button_1 = Instance.new("TextButton")
-            
-            Button.Name = "Button"
-            Button.Parent = Section
-            Button.BackgroundColor3 = Color3.fromRGB(163,162,165)
-            Button.BackgroundTransparency = 1
-			-- Tự động tăng chiều cao nếu có Description
-            Button.Size = UDim2.new(1, 0, 0, Desc and 55 or 40)
-             
-            RowBG_1.Name = "RowBG"
-            RowBG_1.Parent = Button
-            RowBG_1.AnchorPoint = Vector2.new(0.5, 0.5)
-            RowBG_1.BackgroundColor3 = getgenv().UIColor["Background 1 Color"]
-            RowBG_1.BackgroundTransparency = getgenv().UIColor["Background 1 Transparency"]
-            RowBG_1.Position = UDim2.new(0.5, 0,0.5, 0)
-            RowBG_1.Size = UDim2.new(1, -10,1, 0)
-             
-            UICorner_1.Parent = RowBG_1
-            UICorner_1.CornerRadius = UDim.new(0,10)
-             
-            RowHover_1.Name = "RowHover"
-            RowHover_1.Parent = RowBG_1
-            RowHover_1.BackgroundColor3 = getgenv().UIColor["Background 2 Color"]
-            RowHover_1.BackgroundTransparency = 1
-            RowHover_1.Size = UDim2.new(1, 0,1, 0)
-            RowHover_1.ZIndex = 2
-             
-            UICorner_2.Parent = RowHover_1
-            UICorner_2.CornerRadius = UDim.new(0,10)
-             
-            TextColor_1.Name = "TextColor"
-            TextColor_1.Parent = RowBG_1
-            TextColor_1.BackgroundColor3 = Color3.fromRGB(163,162,165)
-            TextColor_1.BackgroundTransparency = 1
-			-- Canh lại vị trí chữ Title nếu có Description
-            TextColor_1.Position = UDim2.new(0, 12, 0, Desc and 8 or 0)
-            TextColor_1.Size = UDim2.new(1, -110, Desc and 0 or 1, Desc and 20 or 0)
-            TextColor_1.Font = Enum.Font.GothamBold
-            TextColor_1.Text = Title
-            TextColor_1.TextColor3 = getgenv().UIColor["GUI Text Color"]
-            TextColor_1.TextSize = 14
-            TextColor_1.TextStrokeTransparency = 0.8500000238418579
-            TextColor_1.TextXAlignment = Enum.TextXAlignment.Left
+            function sectionFunction:AddButton(Setting, Callback)
+				local Title = Setting.Title or Setting.Text or ""
+				local Desc = Setting.Desc or Setting.Description
+				local Callback = Setting.Callback or Setting.Func or function() end
+				local Button = Instance.new("Frame")
+				local RowBG_1 = Instance.new("Frame")
+				local UICorner_1 = Instance.new("UICorner")
+				local RowHover_1 = Instance.new("Frame")
+				local UICorner_2 = Instance.new("UICorner")
+				local TextColor_1 = Instance.new("TextLabel")
+				local ClickArea_1 = Instance.new("Frame")
+				local UICorner_3 = Instance.new("UICorner")
+				local UIGradient_1 = Instance.new("UIGradient")
+				local ImageLabel_1 = Instance.new("ImageLabel")
+				local Frame_1 = Instance.new("Frame")
+				local UICorner_4 = Instance.new("UICorner")
+				local UIScale_1 = Instance.new("UIScale")
+				local Button_1 = Instance.new("TextButton")
+				
+				Button.Name = "Button"
+				Button.Parent = Section
+				Button.BackgroundColor3 = Color3.fromRGB(163,162,165)
+				Button.BackgroundTransparency = 1
+				Button.Size = UDim2.new(1, 0, 0, Desc and 55 or 40)
+				 
+				RowBG_1.Name = "RowBG"
+				RowBG_1.Parent = Button
+				RowBG_1.AnchorPoint = Vector2.new(0.5, 0.5)
+				RowBG_1.BackgroundColor3 = getgenv().UIColor["Background 1 Color"]
+				RowBG_1.BackgroundTransparency = getgenv().UIColor["Background 1 Transparency"]
+				RowBG_1.Position = UDim2.new(0.5, 0,0.5, 0)
+				RowBG_1.Size = UDim2.new(1, -10,1, 0)
+				 
+				UICorner_1.Parent = RowBG_1
+				UICorner_1.CornerRadius = UDim.new(0,10)
+				 
+				RowHover_1.Name = "RowHover"
+				RowHover_1.Parent = RowBG_1
+				RowHover_1.BackgroundColor3 = getgenv().UIColor["Background 2 Color"]
+				RowHover_1.BackgroundTransparency = 1
+				RowHover_1.Size = UDim2.new(1, 0,1, 0)
+				RowHover_1.ZIndex = 2
+				 
+				UICorner_2.Parent = RowHover_1
+				UICorner_2.CornerRadius = UDim.new(0,10)
+				 
+				TextColor_1.Name = "TextColor"
+				TextColor_1.Parent = RowBG_1
+				TextColor_1.BackgroundColor3 = Color3.fromRGB(163,162,165)
+				TextColor_1.BackgroundTransparency = 1
+				TextColor_1.Position = Desc and UDim2.new(0, 12, 0, 4) or UDim2.new(0, 12, 0, 0)
+				TextColor_1.Size = Desc and UDim2.new(1, -110, 0, 25) or UDim2.new(1, -110, 1, 0)
+				TextColor_1.Font = Enum.Font.GothamBold
+				TextColor_1.Text = Title
+				TextColor_1.TextColor3 = getgenv().UIColor["GUI Text Color"]
+				TextColor_1.TextSize = 14
+				TextColor_1.TextStrokeTransparency = 0.85
+				TextColor_1.TextXAlignment = Enum.TextXAlignment.Left
 
-			-- Khởi tạo Label cho Description nếu có
-			if Desc then
-				TextDesc_1 = Instance.new("TextLabel")
-				TextDesc_1.Name = "TextDesc"
-				TextDesc_1.Parent = RowBG_1
-				TextDesc_1.BackgroundColor3 = Color3.fromRGB(163,162,165)
-				TextDesc_1.BackgroundTransparency = 1
-				TextDesc_1.Position = UDim2.new(0, 12, 0, 27)
-				TextDesc_1.Size = UDim2.new(1, -110, 0, 20)
-				TextDesc_1.Font = Enum.Font.GothamBlack
-				TextDesc_1.Text = Desc
-				TextDesc_1.TextColor3 = getgenv().UIColor["Toggle Desc Color"] or Color3.fromRGB(185, 185, 185)
-				TextDesc_1.TextSize = 12
-				TextDesc_1.TextStrokeTransparency = 0.8500000238418579
-				TextDesc_1.TextXAlignment = Enum.TextXAlignment.Left
+				if Desc then
+					local TextColor_Desc = Instance.new("TextLabel")
+					TextColor_Desc.Name = "TextColorDesc"
+					TextColor_Desc.Parent = RowBG_1
+					TextColor_Desc.BackgroundColor3 = Color3.fromRGB(163,162,165)
+					TextColor_Desc.BackgroundTransparency = 1
+					TextColor_Desc.Position = UDim2.new(0, 12, 0, 26)
+					TextColor_Desc.Size = UDim2.new(1, -110, 0, 20)
+					TextColor_Desc.Font = Enum.Font.GothamMedium
+					TextColor_Desc.Text = Desc
+					TextColor_Desc.TextColor3 = getgenv().UIColor["Toggle Desc Color"] or Color3.fromRGB(185, 185, 185)
+					TextColor_Desc.TextSize = 12
+					TextColor_Desc.TextStrokeTransparency = 0.85
+					TextColor_Desc.TextXAlignment = Enum.TextXAlignment.Left
+				end
+				 
+				 ClickArea_1.Name = "ClickArea"
+				 ClickArea_1.Parent = RowBG_1
+				 ClickArea_1.AnchorPoint = Vector2.new(1, 0.5)
+				 ClickArea_1.BackgroundColor3 = getgenv().UIColor["Button Color"] or Color3.fromRGB(0, 170, 255)
+				 ClickArea_1.Position = UDim2.new(1, -8,0.5, 0)
+				 ClickArea_1.Size = UDim2.new(0, 94,0, 30)
+				 ClickArea_1.ClipsDescendants = true
+				 
+				 UICorner_3.Parent = ClickArea_1
+				 UICorner_3.CornerRadius = UDim.new(0,12)
+				 
+				 UIGradient_1.Parent = ClickArea_1
+				 UIGradient_1.Color = ColorSequence.new{
+					 ColorSequenceKeypoint.new(0, Color3.fromRGB(77, 196, 255)), 
+					 ColorSequenceKeypoint.new(0.4, Color3.fromRGB(0, 170, 255)), 
+					 ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 140, 220)), 
+					 ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 110, 190))
+				 }
+				 UIGradient_1.Rotation = 90
+				 
+				 ImageLabel_1.Parent = ClickArea_1
+				 ImageLabel_1.AnchorPoint = Vector2.new(0.5, 0.5)
+				 ImageLabel_1.BackgroundColor3 = Color3.fromRGB(163,162,165)
+				 ImageLabel_1.BackgroundTransparency = 1
+				 ImageLabel_1.Position = UDim2.new(0.5, 0,0.5, 0)
+				 ImageLabel_1.Size = UDim2.new(1, 14,1, 14)
+				 ImageLabel_1.ZIndex = 0
+				 ImageLabel_1.Image = "rbxassetid://5028857084"
+				 ImageLabel_1.ImageTransparency = 0.7
+				 ImageLabel_1.ScaleType = Enum.ScaleType.Slice
+				 ImageLabel_1.SliceCenter = Rect.new(24, 24, 276, 276)
+				 
+				 Frame_1.Parent = ClickArea_1
+				 Frame_1.AnchorPoint = Vector2.new(0.5, 0)
+				 Frame_1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				 Frame_1.BackgroundTransparency = 0.8
+				 Frame_1.Position = UDim2.new(0.5, 0,0, 2)
+				 Frame_1.Size = UDim2.new(1, -6,0, 10)
+				 Frame_1.ZIndex = 2
+				 
+				 UICorner_4.Parent = Frame_1
+				 UICorner_4.CornerRadius = UDim.new(0,10)
+				 
+				 UIScale_1.Parent = ClickArea_1
+				 
+				 Button_1.Name = "Button"
+				 Button_1.Parent = ClickArea_1
+				 Button_1.Active = true
+				 Button_1.AutoButtonColor = false
+				 Button_1.BackgroundColor3 = Color3.fromRGB(163,162,165)
+				 Button_1.BackgroundTransparency = 1
+				 Button_1.Size = UDim2.new(1, 0,1, 0)
+				 Button_1.Font = Enum.Font.GothamBold
+				 Button_1.Text = "Click"
+				 Button_1.TextColor3 = Color3.fromRGB(240, 240, 240)
+				 Button_1.TextSize = 13
+
+				 UIScale_1.Scale = 1
+				 
+				 local scaleHover = TweenService:Create(UIScale_1, TweenInfo.new(0.12, Enum.EasingStyle.Sine), { Scale = 1.05 })
+				 local scaleNormal = TweenService:Create(UIScale_1, TweenInfo.new(0.12, Enum.EasingStyle.Sine), { Scale = 1 })
+				 
+				 Button_1.MouseEnter:Connect(function()
+					scaleHover:Play()
+				 end)
+				 
+				 Button_1.MouseLeave:Connect(function()
+					scaleNormal:Play()
+				 end)
+				 
+					Button_1.MouseButton1Down:Connect(function()
+					   
+						local w = ClickArea_1.AbsoluteSize.X
+						local h = ClickArea_1.AbsoluteSize.Y
+						
+						local ripple = Instance.new("Frame")
+						ripple.AnchorPoint = Vector2.new(0.5, 0.5)
+						ripple.Position = UDim2.new(0.5, 0, 0.5, 0)
+						ripple.Size = UDim2.new(0, 0, 0, 0)
+						ripple.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+						ripple.BackgroundTransparency = 0.6
+						ripple.ZIndex = 20
+						ripple.Parent = ClickArea_1
+						
+						local rippleCorner = Instance.new("UICorner")
+						rippleCorner.CornerRadius = UICorner_3.CornerRadius 
+						rippleCorner.Parent = ripple
+						
+						local rippleTween = TweenService:Create(
+							ripple,
+							TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+							{
+								Size = UDim2.new(1, 0, 1, 0),
+								BackgroundTransparency = 1,
+								Position = UDim2.new(0.5, 0, 0.5, 0)
+							}
+						)
+						
+						rippleTween:Play()
+						rippleTween.Completed:Connect(function()
+							ripple:Destroy()
+						end)
+						
+						Callback()
+					end)
+					local f = {}
+					function f:SetTitle(vl)
+						TextColor_1.Text = vl
+					end
+					local controlData = {
+						Name = Title,
+						Section = Section,
+						Element = Button,
+						SectionName = Section_Name,
+						TabName = Page_Name,
+						TabButton = PageName
+					}
+					table.insert(getgenv().AllControls, controlData)
+					
+					return f
 			end
-             
-            ClickArea_1.Name = "ClickArea"
-            ClickArea_1.Parent = RowBG_1
-            ClickArea_1.AnchorPoint = Vector2.new(1, 0.5)
-            ClickArea_1.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-            ClickArea_1.Position = UDim2.new(1, -8,0.5, 0)
-            ClickArea_1.Size = UDim2.new(0, 94,0, 30)
-            ClickArea_1.ClipsDescendants = true
-             
-            UICorner_3.Parent = ClickArea_1
-            UICorner_3.CornerRadius = UDim.new(0,12)
-             
-            UIGradient_1.Parent = ClickArea_1
-            UIGradient_1.Color = ColorSequence.new{
-                 ColorSequenceKeypoint.new(0, Color3.fromRGB(77, 196, 255)), 
-                 ColorSequenceKeypoint.new(0.4, Color3.fromRGB(0, 170, 255)), 
-                 ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 140, 220)), 
-                 ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 110, 190))
-            }
-            UIGradient_1.Rotation = 90
-             
-            ImageLabel_1.Parent = ClickArea_1
-            ImageLabel_1.AnchorPoint = Vector2.new(0.5, 0.5)
-            ImageLabel_1.BackgroundColor3 = Color3.fromRGB(163,162,165)
-            ImageLabel_1.BackgroundTransparency = 1
-            ImageLabel_1.Position = UDim2.new(0.5, 0,0.5, 0)
-            ImageLabel_1.Size = UDim2.new(1, 14,1, 14)
-            ImageLabel_1.ZIndex = 0
-            ImageLabel_1.Image = "rbxassetid://5028857084"
-            ImageLabel_1.ImageTransparency = 0.7
-            ImageLabel_1.ScaleType = Enum.ScaleType.Slice
-            ImageLabel_1.SliceCenter = Rect.new(24, 24, 276, 276)
-             
-            Frame_1.Parent = ClickArea_1
-            Frame_1.AnchorPoint = Vector2.new(0.5, 0)
-            Frame_1.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            Frame_1.BackgroundTransparency = 0.8
-            Frame_1.Position = UDim2.new(0.5, 0,0, 2)
-            Frame_1.Size = UDim2.new(1, -6,0, 10)
-            Frame_1.ZIndex = 2
-             
-            UICorner_4.Parent = Frame_1
-            UICorner_4.CornerRadius = UDim.new(0,10)
-             
-            UIScale_1.Parent = ClickArea_1
-             
-            Button_1.Name = "Button"
-            Button_1.Parent = ClickArea_1
-            Button_1.Active = true
-            Button_1.AutoButtonColor = false
-            Button_1.BackgroundColor3 = Color3.fromRGB(163,162,165)
-            Button_1.BackgroundTransparency = 1
-            Button_1.Size = UDim2.new(1, 0,1, 0)
-            Button_1.Font = Enum.Font.GothamBold
-            Button_1.Text = "Click"
-            Button_1.TextColor3 = Color3.fromRGB(240, 240, 240)
-            Button_1.TextSize = 13
-
-            UIScale_1.Scale = 1
-             
-            local scaleHover = TweenService:Create(UIScale_1, TweenInfo.new(0.12, Enum.EasingStyle.Sine), { Scale = 1.05 })
-            local scaleNormal = TweenService:Create(UIScale_1, TweenInfo.new(0.12, Enum.EasingStyle.Sine), { Scale = 1 })
-             
-            Button_1.MouseEnter:Connect(function()
-             	scaleHover:Play()
-            end)
-             
-            Button_1.MouseLeave:Connect(function()
-             	scaleNormal:Play()
-            end)
-             
-            Button_1.MouseButton1Down:Connect(function()
-                local w = ClickArea_1.AbsoluteSize.X
-                local h = ClickArea_1.AbsoluteSize.Y
-                    
-                local ripple = Instance.new("Frame")
-                ripple.AnchorPoint = Vector2.new(0.5, 0.5)
-                ripple.Position = UDim2.new(0.5, 0, 0.5, 0)
-                ripple.Size = UDim2.new(0, 0, 0, 0)
-                ripple.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                ripple.BackgroundTransparency = 0.6
-                ripple.ZIndex = 20
-                ripple.Parent = ClickArea_1
-                    
-                local rippleCorner = Instance.new("UICorner")
-                rippleCorner.CornerRadius = UICorner_3.CornerRadius 
-                rippleCorner.Parent = ripple
-                    
-                local rippleTween = TweenService:Create(
-                    ripple,
-                    TweenInfo.new(0.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-                    {
-                        Size = UDim2.new(1, 0, 1, 0),
-                        BackgroundTransparency = 1,
-                        Position = UDim2.new(0.5, 0, 0.5, 0)
-                    }
-                )
-                    
-                rippleTween:Play()
-                rippleTween.Completed:Connect(function()
-                    ripple:Destroy()
-                end)
-                    
-                Callback()
-            end)
-            local f = {}
-            function f:SetTitle(vl)
-                TextColor_1.Text = vl
-            end
-            local controlData = {
-                Name = Title,
-                Section = Section,
-                Element = Button,
-                SectionName = Section_Name,
-                TabName = Page_Name,
-                TabButton = PageName
-            }
-            table.insert(getgenv().AllControls, controlData)
-                
-            return f
         
 			function sectionFunction:AddLabel(text)
 				local Title = text
