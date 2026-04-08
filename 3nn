@@ -42,8 +42,8 @@ local T1UIColor = {
 	["Dropdown Selected Check Color"] = Color3.fromRGB(0, 110, 190), 
 	["Textbox Highlight Color"] = Color3.fromRGB(0, 170, 255),
 	["Box Highlight Color"] = Color3.fromRGB(0, 170, 255),
-	["Sler Line Color"] = Color3.fromRGB(0, 170, 255),
-	["Sler Highlight Color"] = Color3.fromRGB(0, 110, 190),
+	["Slider Line Color"] = Color3.fromRGB(0, 170, 255),
+	["Slider Highlight Color"] = Color3.fromRGB(0, 110, 190),
 	["Tween Animation 1 Speed"] = DisableAnimation and 0 or 0.25,
 	["Tween Animation 2 Speed"] = DisableAnimation and 0 or 0.5,
 	["Tween Animation 3 Speed"] = DisableAnimation and 0 or 0.1,
@@ -117,36 +117,36 @@ Library_Function.NotiGui = Instance.new('ScreenGui')
 Library_Function.NotiGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 Library_Function.NotiGui.Name = 'Nousigi Hub Notification'
 
-Library_Function.HeGui = Instance.new('ScreenGui')
-Library_Function.HeGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-Library_Function.HeGui.Name = 'Nousigi Hub Btn'
+Library_Function.HideGui = Instance.new('ScreenGui')
+Library_Function.HideGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Library_Function.HideGui.Name = 'Nousigi Hub Btn'
 
 
-local btnHe = Instance.new('TextButton', Library_Function.HeGui) 
-btnHe.BackgroundTransparency = 1
-btnHe.Text = ""
-btnHe.AnchorPoint = Vector2.new(0, 1)
-btnHe.Size = UDim2.new(0, 50, 0, 50)
-btnHe.Position = UDim2.new(0, 15, 1, -15)
+local btnHide = Instance.new('TextButton', Library_Function.HideGui) 
+btnHide.BackgroundTransparency = 1
+btnHide.Text = ""
+btnHide.AnchorPoint = Vector2.new(0, 1)
+btnHide.Size = UDim2.new(0, 50, 0, 50)
+btnHide.Position = UDim2.new(0, 15, 1, -15)
 
-local btnHeFrame = Instance.new('Frame', btnHe)
-btnHeFrame.AnchorPoint = Vector2.new(0, 1)
-btnHeFrame.Size = UDim2.new(0, 50, 0, 50)
-btnHeFrame.Position = UDim2.new(0, 0, 1, 0)
-btnHeFrame.Name = "dut dit"
-btnHeFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-btnHeFrame.BackgroundTransparency = getgenv().UIToggled and 0 or .25
+local btnHideFrame = Instance.new('Frame', btnHide)
+btnHideFrame.AnchorPoint = Vector2.new(0, 1)
+btnHideFrame.Size = UDim2.new(0, 50, 0, 50)
+btnHideFrame.Position = UDim2.new(0, 0, 1, 0)
+btnHideFrame.Name = "dut dit"
+btnHideFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+btnHideFrame.BackgroundTransparency = getgenv().UIToggled and 0 or .25
 
-local imgHe = Instance.new('ImageLabel', btnHe)
-imgHe.AnchorPoint = Vector2.new(0, 0)
-imgHe.Image = getgenv().UIColor["Logo Image"]
-imgHe.BackgroundTransparency = 1
-imgHe.Size = UDim2.new(0, getgenv().UIToggled and (getgenv().T1 and 30 or 40) or (getgenv().T1 and 25 or 30), 0, getgenv().UIToggled and (getgenv().T1 and 30 or 40) or (getgenv().T1 and 25 or 30))
-imgHe.AnchorPoint = Vector2.new(.5, .5)
-imgHe.Position = UDim2.new(.5, 0, .5, 0)
+local imgHide = Instance.new('ImageLabel', btnHide)
+imgHide.AnchorPoint = Vector2.new(0, 0)
+imgHide.Image = getgenv().UIColor["Logo Image"]
+imgHide.BackgroundTransparency = 1
+imgHide.Size = UDim2.new(0, getgenv().UIToggled and (getgenv().T1 and 30 or 40) or (getgenv().T1 and 25 or 30), 0, getgenv().UIToggled and (getgenv().T1 and 30 or 40) or (getgenv().T1 and 25 or 30))
+imgHide.AnchorPoint = Vector2.new(.5, .5)
+imgHide.Position = UDim2.new(.5, 0, .5, 0)
 
-local UICornerBtnHe = Instance.new("UICorner")
-UICornerBtnHe.Parent = btnHideFrame
+local UICornerBtnHide = Instance.new("UICorner")
+UICornerBtnHide.Parent = btnHideFrame
 UICornerBtnHide.CornerRadius = UDim.new(1, 0)
 
 Library.ToggleUI = function()
@@ -330,7 +330,7 @@ local libCreateNoti = function(Setting)
 	local colorG = tostring(Library_Function.Getcolor(getgenv().UIColor['Title Text Color'])[2])
 	local colorB = tostring(Library_Function.Getcolor(getgenv().UIColor['Title Text Color'])[3])
 	local color = colorR .. ',' .. colorG .. ',' .. colorB
-    TextLabelNoti.Text = "<font color=\"rgb(" .. tostring(color or "255,206,27") .. ")\">" .. tostring("Trẩu Hub") .. "</font> " .. tostring(getgenv().TitleNameNoti or "")
+    TextLabelNoti.Text = "<font color=\"rgb(" .. tostring(color or "255,206,27") .. ")\">" .. tostring("RealKid Hub") .. "</font> " .. tostring(getgenv().TitleNameNoti or "")
     
 	TextLabelNoti.Name = "TextLabelNoti"
 	TextLabelNoti.Parent = Topnoti
@@ -437,7 +437,7 @@ function Library:Notify(Setting, bypass)
 end
 
 function Library:CreateWindow(Setting)
-    local TitleNameMain = Setting.Title or "Trẩu Hub"
+    local TitleNameMain = Setting.Title or "RealKid Hub"
     getgenv().MainDesc = Setting.Desc or Setting.Subtitle or ""
     
     if Setting.Image then
@@ -572,7 +572,7 @@ function Library:CreateWindow(Setting)
 	local colorG = tostring(Library_Function.Getcolor(getgenv().UIColor['Title Text Color'])[2])
 	local colorB = tostring(Library_Function.Getcolor(getgenv().UIColor['Title Text Color'])[3])
 	local color = colorR .. ',' .. colorG .. ',' .. colorB
-    TextLabelMain.Text = "<font color=\"rgb(" .. tostring(color or "255,206,27") .. ")\">" .. tostring(TitleNameMain or "Trẩu Hub") .. "</font> " .. tostring(getgenv().MainDesc or "")
+    TextLabelMain.Text = "<font color=\"rgb(" .. tostring(color or "255,206,27") .. ")\">" .. tostring(TitleNameMain or "RealKid Hub") .. "</font> " .. tostring(getgenv().MainDesc or "")
 
 	PageControl.Name = "Background1"
 	PageControl.Parent = Concacmain
@@ -3496,4 +3496,3 @@ end
 end
 
 return Library
-
