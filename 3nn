@@ -2132,9 +2132,6 @@ function Library:CreateWindow(Setting)
                             return List[Setting.Default]
                         elseif type(Setting.Default) == "string" then
                             return Setting.Default
-                        elseif type(Setting.Default) == "table" then
-                            return Setting.Default
-                        end
                         end
                     end
                     return nil
@@ -2308,11 +2305,7 @@ function Library:CreateWindow(Setting)
                 if Selected then
                     ListNew = {}
                     for _, value in ipairs(List) do
-                        if type(Default) == "table" then
-                            ListNew[value] = (table.find(Default, value) ~= nil)
-                        else
-                            ListNew[value] = (value == Default)
-                        end
+                        ListNew[value] = (value == Default)
                         table.insert(OrderedList, value)
                     end
                 else
