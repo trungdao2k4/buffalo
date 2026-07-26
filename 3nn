@@ -472,51 +472,6 @@ function Library:CreateWindow(Setting)
 	Main.AnchorPoint = Vector2.new(0.5, 0.5)
 	Main.Size = UDim2.new(0, 629, 0, 359)
 
-	-- Keep the same layout while rendering it at a device-appropriate size.
-	local MainScale = Instance.new("UIScale")
-	MainScale.Name = "DeviceScale"
-	MainScale.Parent = Main
-
-	local isMobile = uis.TouchEnabled and not uis.KeyboardEnabled
-	local preferredScale = isMobile and (Setting.MobileScale or 0.85) or (Setting.DesktopScale or 1.25)
-	local viewportConnection
-
-	local function updateMainScale()
-		local camera = workspace.CurrentCamera
-		if not camera then
-			MainScale.Scale = preferredScale
-			return
-		end
-
-		local viewport = camera.ViewportSize
-		local fitScale = math.min((viewport.X - 24) / 629, (viewport.Y - 24) / 359)
-		MainScale.Scale = math.max(0.45, math.min(preferredScale, fitScale))
-	end
-
-	local function watchViewport()
-		if viewportConnection then
-			viewportConnection:Disconnect()
-			viewportConnection = nil
-		end
-
-		local camera = workspace.CurrentCamera
-		if camera then
-			viewportConnection = camera:GetPropertyChangedSignal("ViewportSize"):Connect(updateMainScale)
-		end
-		updateMainScale()
-	end
-
-	watchViewport()
-	local cameraConnection = workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(watchViewport)
-	Main.AncestryChanged:Connect(function(_, parent)
-		if not parent then
-			if viewportConnection then
-				viewportConnection:Disconnect()
-			end
-			cameraConnection:Disconnect()
-		end
-	end)
-
 	makeDraggable(Main, Main)
 
 	maingui.Name = "maingui"
