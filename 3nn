@@ -472,6 +472,54 @@ function Library:CreateWindow(Setting)
 	Main.AnchorPoint = Vector2.new(0.5, 0.5)
 	Main.Size = UDim2.new(0, 629, 0, 359)
 
+	-- Keep the same layout while rendering it at a device-appropriate size.
+	local MainScale = Instance.new("UIScale")
+	MainScale.Name = "DeviceScale"
+	MainScale.Parent = Main
+
+	local isMobile = uis.TouchEnabled and not uis.KeyboardEnabled
+	local preferredScale = isMobile and (Setting.MobileScale or 0.85) or (Setting.DesktopScale or 1.25)
+	local viewportConnection
+	local function toLayoutPixels(value)
+		return value / math.max(MainScale.Scale, 0.001)
+	end
+
+	local function updateMainScale()
+		local camera = workspace.CurrentCamera
+		if not camera then
+			MainScale.Scale = preferredScale
+			return
+		end
+
+		local viewport = camera.ViewportSize
+		local fitScale = math.min((viewport.X - 24) / 629, (viewport.Y - 24) / 359)
+		MainScale.Scale = math.max(0.45, math.min(preferredScale, fitScale))
+	end
+
+	local function watchViewport()
+		if viewportConnection then
+			viewportConnection:Disconnect()
+			viewportConnection = nil
+		end
+
+		local camera = workspace.CurrentCamera
+		if camera then
+			viewportConnection = camera:GetPropertyChangedSignal("ViewportSize"):Connect(updateMainScale)
+		end
+		updateMainScale()
+	end
+
+	watchViewport()
+	local cameraConnection = workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(watchViewport)
+	Main.AncestryChanged:Connect(function(_, parent)
+		if not parent then
+			if viewportConnection then
+				viewportConnection:Disconnect()
+			end
+			cameraConnection:Disconnect()
+		end
+	end)
+
 	makeDraggable(Main, Main)
 
 	maingui.Name = "maingui"
@@ -696,7 +744,7 @@ function Library:CreateWindow(Setting)
 	UIPage.TweenTime = getgenv().UIColor["Tween Animation 1 Speed"]
 
 	UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-		ControlList.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + 5)
+		ControlList.CanvasSize = UDim2.new(0, 0, 0, toLayoutPixels(UIListLayout.AbsoluteContentSize.Y) + 5)
 	end)
 
 	local Shadow = Instance.new("ImageLabel", Main)
@@ -963,7 +1011,7 @@ function Library:CreateWindow(Setting)
 		Pagelistlayout.SortOrder = Enum.SortOrder.LayoutOrder
 		Pagelistlayout.Padding = UDim.new(0, 5)
 		Pagelistlayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-			PageList.CanvasSize = UDim2.new(0, 0, 0, Pagelistlayout.AbsoluteContentSize.Y)
+			PageList.CanvasSize = UDim2.new(0, 0, 0, toLayoutPixels(Pagelistlayout.AbsoluteContentSize.Y))
 		end)
 
 		local PageSearch = Instance.new("Frame")
@@ -1268,10 +1316,11 @@ function Library:CreateWindow(Setting)
 			end
 
 			SectionList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+				local contentHeight = toLayoutPixels(SectionList.AbsoluteContentSize.Y) + 5
 				if (not Toggleable) then
-					Section.Size = UDim2.new(1, -5, 0, SectionList.AbsoluteContentSize.Y + 5)
+					Section.Size = UDim2.new(1, -5, 0, contentHeight)
 				end
-				SizeSectionY = SectionList.AbsoluteContentSize.Y + 5
+				SizeSectionY = contentHeight
 				if sectionIsVisible then
 					TweenService:Create(Section, TweenInfo.new(getgenv().UIColor["Tween Animation 1 Speed"]), {
 						Size =  UDim2.new(1, -5, 0, SizeSectionY)
@@ -1839,12 +1888,12 @@ function Library:CreateWindow(Setting)
                     }):Play()
                 end)
                 
-                ScrollContainerList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-                    DropdownScroll.CanvasSize = UDim2.new(0, 0, 0, 10 + ScrollContainerList.AbsoluteContentSize.Y + 5)
-                end)
-                
-                InternalList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-                    local contentHeight = math.min(InternalList.AbsoluteContentSize.Y + 10, 300)
+				ScrollContainerList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+					DropdownScroll.CanvasSize = UDim2.new(0, 0, 0, toLayoutPixels(ScrollContainerList.AbsoluteContentSize.Y) + 15)
+				end)
+				
+				InternalList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+					local contentHeight = math.min(toLayoutPixels(InternalList.AbsoluteContentSize.Y) + 10, 300)
                     local listsize = isOpen and UDim2.new(1, 0, 0, contentHeight) or UDim2.new(1, 0, 0, 0)
                     local mainsize = isOpen and UDim2.new(1, 0, 0, contentHeight + 25) or UDim2.new(1, 0, 0, 25)
                     
@@ -2264,7 +2313,7 @@ function Library:CreateWindow(Setting)
 				ScrollContainerList.SortOrder = Enum.SortOrder.LayoutOrder
 				ScrollContainerList.Padding = UDim.new(0, 5)
 				ScrollContainerList:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-					DropdownScroll.CanvasSize = UDim2.new(0, 0, 0, 10 + ScrollContainerList.AbsoluteContentSize.Y + 5)
+					DropdownScroll.CanvasSize = UDim2.new(0, 0, 0, toLayoutPixels(ScrollContainerList.AbsoluteContentSize.Y) + 15)
 				end)
 				local isbusy = false
 				local found = {}
