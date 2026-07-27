@@ -2950,8 +2950,17 @@ function Library:CreateWindow(Setting)
 					TweenService:Create(ImgDrop, TweenInfo.new(getgenv().UIColor["Tween Animation 2 Speed"]), {
 						Rotation = DropCRotation
 					}):Play()
-					ListNew = {}
-					ListNew = List
+					local oldSelections = ListNew
+					if Selected then
+						ListNew = {}
+						OrderedList = {}
+						for _, value in ipairs(List or {}) do
+							ListNew[value] = oldSelections[value] == true
+							table.insert(OrderedList, value)
+						end
+					else
+						ListNew = List or {}
+					end
 					refreshlist()
 					if Search then
 						Dropdowntitle.PlaceholderText = Title .. ': '
